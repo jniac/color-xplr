@@ -1,0 +1,21 @@
+{
+  "name": "color-xplr",
+  "version": "1.0.0",
+  "description": "It's a color picker for the browser. But a cool one.",
+  "main": "lib/index.js",
+  "module": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "start": "node dev.mjs",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "chokidar": "^3.5.3",
+    "esbuild": "0.16.7",
+    "fs-extra": "^11.1.0",
+    "typescript": "^4.9.4"
+  }
+}
