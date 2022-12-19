@@ -39,9 +39,10 @@ const hsl_to_rgb = (h: number, s: number, l: number, out = { r: 0, g: 0, b: 0 })
   } else {
     const _c = (1 - Math.abs(2 * l - 1)) * s
     const _x = _c * (1 - Math.abs((h * 6) % 2 - 1))
-    const m = l - _c / 2
-    const c = clamp01(_c + m)
-    const x = clamp01(_x + m)
+    const _m = l - _c / 2
+    const c = clamp01(_c + _m)
+    const x = clamp01(_x + _m)
+    const m = clamp01(_m)
     apply_cxm(h, c, x, m, out)
   }
   return out
@@ -53,9 +54,10 @@ const hsv_to_rgb = (h: number, s: number, v: number, out = { r: 0, g: 0, b: 0 })
   v = clamp01(v)
   const _c = v * s
   const _x = _c * (1 - Math.abs((h * 6) % 2 - 1))
-  const m = v - _c
-  const c = clamp01(_c + m)
-  const x = clamp01(_x + m)
+  const _m = v - _c
+  const c = clamp01(_c + _m)
+  const x = clamp01(_x + _m)
+  const m = clamp01(_m)
   apply_cxm(h, c, x, m, out)
   return out
 }
@@ -239,7 +241,3 @@ export class Color {
     return `#${this.toHex().toString(16).padStart(6, '0')}`
   }
 }
-
-
-console.log(new Color().setHSL(1 / 6, 1, .5))
-console.log(new Color().setHSV(1 / 6, 1, 1))
