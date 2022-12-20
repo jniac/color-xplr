@@ -53,6 +53,9 @@ export const planeModeCss = /* css */`
   right: 0px;
 }
 
+#color-xplr .plane .modes .mode.selected {
+  text-decoration: underline;
+}
 
 #color-xplr .plane .modes .mode.selected::before {
   transform: none;

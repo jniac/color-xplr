@@ -128,6 +128,10 @@ const rgb_to_hsv = (r: number, g: number, b: number, out = { h: 0, s: 0, v: 0 })
   return out
 }
 
+const rgb_to_grayscale = (r: number, g: number, b: number) => {
+  return 0.21 * r + 0.72 * g + 0.07 * b
+}
+
 export class Color {
   r = 1
   g = 1
@@ -231,6 +235,10 @@ export class Color {
     out.b = to0xff(b)
     out.a = to0xff(a)
     return out
+  }
+
+  toGrayscale() {
+    return rgb_to_grayscale(this.r, this.g, this.b)
   }
 
   toHex() {

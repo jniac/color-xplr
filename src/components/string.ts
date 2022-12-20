@@ -6,7 +6,7 @@ export const initString = (color: Color, updateColor: (newColor: Color) => void,
   const input = div.querySelector('input') as HTMLInputElement
   const update = () => {
     input.value = color.toCss()
-    input.style.color = color.hsv.v > .95 ? 'black' : 'white'
+    input.style.color = color.toGrayscale() > .5 ? 'black' : 'white'
     div.style.backgroundColor = color.toCss()
   }
   return {
