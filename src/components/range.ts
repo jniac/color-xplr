@@ -69,6 +69,7 @@ export const initRange = (color: Color, updateColor: (newColor: Color) => void, 
           _color.setHSL(t, .75, .5)
         })
         cursorUpdate(color.hsv.h)
+        canvas.style.borderColor = color.toCss()
         cursor.style.backgroundColor = _color.setHSV(color.hsv.h, 1, 1).toCss()
         break
       }
