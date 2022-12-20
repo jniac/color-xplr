@@ -1,23 +1,17 @@
-import { Color } from '../math/color'
+import { Color, Point } from '../math'
+import { PlaneMode, initPlaneModes } from './plane-modes'
 import { handlePointer } from './utils'
 
 const _color = new Color()
 const _color32 = _color.toColor32()
 
-const planeModes = ['hue', 'red', 'green', 'blue'] as const
-type PlaneMode = (typeof planeModes)[number]
-
 export const initPlane = (color: Color, updateColor: (newColor: Color) => void, div: HTMLDivElement) => {
   let mode: PlaneMode  = 'hue'
   const canvas = div.querySelector('canvas') as HTMLCanvasElement
   const cursor = div.querySelector('.cursor') as HTMLDivElement
-  const modes = div.querySelector('.modes') as HTMLDivElement
+  const cursorCoords = new Point()
 
-  for (const mode of planeModes) {
-    const div = document.createElement('div')
-    div.innerHTML = mode
-    modes.appendChild(div)
-  }
+  const modes = initPlaneModes(div, mode)
 
   const context = canvas.getContext('2d')!
   const imageData = new ImageData(256, 256)
@@ -37,9 +31,9 @@ export const initPlane = (color: Color, updateColor: (newColor: Color) => void, 
     }
   }, {
     skip: event => {
-      const shouldSkip = event.target !== canvas
+      const shouldSkip = event.target !== canvas && event.target !== cursor
       if (shouldSkip) {
-        mode = (event.target as any).innerHTML
+        mode = (event.target as any).dataset.mode
         update()
       }
       return shouldSkip
@@ -69,7 +63,8 @@ export const initPlane = (color: Color, updateColor: (newColor: Color) => void, 
     context.putImageData(imageData, 0, 0)
   }
 
-  const updateCursor = (x: number, y: number) => {
+  const updateCursor = () => {
+    const { x, y } = cursorCoords
     const left = x * 100
     const top = y * 100
     cursor.style.left = `${left.toFixed(1)}%`
@@ -83,32 +78,34 @@ export const initPlane = (color: Color, updateColor: (newColor: Color) => void, 
         updateImage((x, y) => {
           _color.setHSV(color.hsv.h, x, 1 - y)
         })
-        updateCursor(color.hsv.s, 1 - color.hsv.v)
+        cursorCoords.set(color.hsv.s, 1 - color.hsv.v)
         break
       }
       case 'red': {
         updateImage((x, y) => {
           _color.setRGB(color.r, x, 1 - y)
         })
-        updateCursor(color.g, 1 - color.b)
+        cursorCoords.set(color.g, 1 - color.b)
         break
       }
       case 'green': {
         updateImage((x, y) => {
           _color.setRGB(x, color.g, 1 - y)
         })
-        updateCursor(color.r, 1 - color.b)
+        cursorCoords.set(color.r, 1 - color.b)
         break
       }
       case 'blue': {
         updateImage((x, y) => {
           _color.setRGB(x, 1 - y, color.b)
         })
-        updateCursor(color.r, 1 - color.g)
+        cursorCoords.set(color.r, 1 - color.g)
         break
       }
     }
-  }
+    updateCursor()
+    modes.update(mode, cursorCoords)
+}
 
   return {
     get updateDuration() { return updateDuration },

@@ -1,4 +1,10 @@
+import { planeModeCss } from './components/plane-modes.css'
+import { planeCss } from './components/plane.css'
+
 export const css: string = /* css */ `
+${planeModeCss}
+${planeCss}
+
 #color-xplr * {
   margin: 0;
   position: relative;
@@ -8,6 +14,7 @@ export const css: string = /* css */ `
 #color-xplr {
   --width: 300px;
   --padding: 4px;
+  --inner-width: calc(var(--width) - 2 * var(--padding));
   width: var(--width);
   padding: var(--padding);
   background-color: #eee;
@@ -19,48 +26,7 @@ export const css: string = /* css */ `
 }
 
 #color-xplr canvas {
-  width: calc(var(--width) - 2 * var(--padding));
-}
-
-#color-xplr .plane {
-  z-index: 1;
-}
-
-#color-xplr .plane canvas {
-  border-radius: 4px;
-}
-
-#color-xplr .plane .modes {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  padding: 16px 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  color: white;
-}
-#color-xplr .plane .modes::before {
-  --size: 8px;
-  content: "";
-  position: absolute;
-  top: 0;
-  width: var(--size);
-  height: var(--size);
-  border-left: solid 2px white;
-  border-top: solid 2px white;
-  transform: rotate(-135deg);
-}
-
-#color-xplr .plane .cursor {
-  --size: 16px;
-  position: absolute;
-  width: var(--size);
-  height: var(--size);
-  border-radius: 50%;
-  border: solid 2px #fff;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
+  width: var(--inner-width);
 }
 
 #color-xplr .ranges {
@@ -100,8 +66,10 @@ export const css: string = /* css */ `
 
 #color-xplr .range .cursor span {
   user-select: none;
-  font-size: .75em;
-  transform: translate(2px, -2px);
+  font-size: .66em;
+  font-weight: 500;
+  transform: translate(3px, -1px);
+  opacity: .5;
 }
 
 #color-xplr .string {

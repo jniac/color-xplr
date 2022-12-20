@@ -1,4 +1,4 @@
-import { css } from './css'
+import { css } from './style.css'
 import { html } from './html'
 import { Color } from './math/color'
 import { initRange } from './components/range'
