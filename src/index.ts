@@ -20,9 +20,10 @@ const createColorXplr = () => {
     color.copy(newColor)
     update()
   }
-
-  const [div1, div2, div3, div4, div5, div6, div7] = div.querySelectorAll('.colors > div') as any as HTMLDivElement[]
-  const plane = initPlane(color, updateColor, div1)
+  
+  const planeDiv = div.querySelector('.plane') as HTMLDivElement
+  const plane = initPlane(color, updateColor, planeDiv)
+  const [div2, div3, div4, div5, div6, div7] = div.querySelectorAll('.ranges > div') as any as HTMLDivElement[]
   const rangeH = initRange(color, updateColor, div2, 'hue')
   const rangeR = initRange(color, updateColor, div3, 'red')
   const rangeG = initRange(color, updateColor, div4, 'green')
@@ -57,6 +58,7 @@ const createColorXplr = () => {
 
   return {
     div,
+    color,
     destroy,
   }
 }

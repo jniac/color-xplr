@@ -3,4 +3,5 @@ import { createColorXplr, Color } from '../../lib/index.js'
 const colorXplr = createColorXplr()
 document.body.append(colorXplr.div)
 
-Object.assign(window, { Color })
+const { color } = colorXplr
+Object.assign(window, { Color, color })

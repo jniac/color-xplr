@@ -15,9 +15,16 @@ export type HandlePointerInfo = {
   y: number
 }
 
-export const handlePointer = (element: HTMLElement, margin: number, callback: (info: HandlePointerInfo) => void) => {
+export const handlePointer = (element: HTMLElement, margin: number, callback: (info: HandlePointerInfo) => void, {
+  skip,
+}: {
+  skip?: (event: PointerEvent) => boolean,
+} = {}) => {
   let isDown = false
   const onDown = (event: PointerEvent) => {
+    if (skip?.(event)) {
+      return
+    }
     isDown = true
     window.addEventListener('pointermove', onMove)
     window.addEventListener('pointerup', onUp)
