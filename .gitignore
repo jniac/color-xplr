@@ -6,4 +6,5 @@ node_modules
 
 # Project
 /lib
+/lib-types
 

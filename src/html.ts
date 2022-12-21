@@ -1,3 +1,5 @@
+import { copySvg } from './assets/copy.svg'
+
 export const html: string = /* html */ `
 <div class="colors">
   <div class="plane">
@@ -8,6 +10,9 @@ export const html: string = /* html */ `
 
   <div class="string">
     <input />
+    <div class="copy">
+      ${copySvg}
+    </div>
   </div>
 
   <div class="ranges">

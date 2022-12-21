@@ -1,11 +1,13 @@
 import { planeModeCss } from './components/plane-modes.css'
 import { planeCss } from './components/plane.css'
 import { rangeCss } from './components/range.css'
+import { stringCss } from './components/string.css'
 
 export const css: string = /* css */ `
 ${planeModeCss}
 ${planeCss}
 ${rangeCss}
+${stringCss}
 
 #color-xplr * {
   margin: 0;

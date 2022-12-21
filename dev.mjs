@@ -44,7 +44,7 @@ const build = async () => {
 
   await log.watch('tsc', async () => {
     try {
-      const { stderr } = await asyncExec('npx tsc --declaration  --emitDeclarationOnly --outDir lib')
+      const { stderr } = await asyncExec('npx tsc --declaration  --emitDeclarationOnly --outDir lib-types')
       if (stderr) {
         console.error(stderr)
       }
