@@ -241,6 +241,11 @@ export class Color {
     return rgb_to_grayscale(this.r, this.g, this.b)
   }
 
+  toGrayscaleCss() {
+    const channel = to0xff(this.toGrayscale()).toString(16).padStart(2, '0')
+    return `#${channel}${channel}${channel}`
+  }
+
   toHex() {
     return (to0xff(this.r) << 16) + (to0xff(this.g) << 8) + to0xff(this.b)
   }

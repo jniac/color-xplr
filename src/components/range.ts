@@ -2,14 +2,20 @@ import { Color } from '../math/color'
 import { clamp01 } from '../math/utils'
 import { computeEventXY, handlePointer } from './utils'
 
-type RangeMode = 'hue' | 'red' | 'green' | 'blue' | 'luminosity' | 'saturation'
+const rangeModes = ['hue', 'red', 'green', 'blue', 'luminosity', 'saturation'] as const
+type RangeMode = (typeof rangeModes)[number]
 
 const _color = new Color()
 const _color32 = _color.toColor32()
 
 export const initRange = (color: Color, updateColor: (newColor: Color) => void, div: HTMLDivElement, mode: RangeMode) => {
+  div.classList.add(mode)
   const canvas = div.querySelector('canvas') as HTMLCanvasElement
   const cursor = div.querySelector('.cursor') as HTMLDivElement
+
+  if (mode !== 'hue') {
+    cursor.innerHTML = `<span>${mode[0].toUpperCase()}</span>`
+  }
 
   const context = canvas.getContext('2d')!
   const imageData = new ImageData(256, 1)
@@ -66,10 +72,13 @@ export const initRange = (color: Color, updateColor: (newColor: Color) => void, 
     switch (mode) {
       case 'hue': {
         imageUpdate(t => {
-          _color.setHSL(t, .75, .5)
+          _color.setHSL(t, 1, .5)
         })
         cursorUpdate(color.hsv.h)
-        canvas.style.borderColor = color.toCss()
+        // canvas.style.borderColor = color.toCss()
+        const colorCss = color.toGrayscaleCss()
+        canvas.style.borderColor = colorCss
+        cursor.style.borderColor = colorCss
         cursor.style.backgroundColor = _color.setHSV(color.hsv.h, 1, 1).toCss()
         break
       }

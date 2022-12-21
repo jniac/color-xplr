@@ -10,7 +10,7 @@ export const rangeCss = /* css */`
 }
 
 #color-xplr .range.hue canvas {
-  border: solid 6.5px #ddd;
+  border: solid 7px #ddd;
 }
 
 #color-xplr .range + .range {
@@ -32,11 +32,12 @@ export const rangeCss = /* css */`
   height: var(--size);
   border-radius: 50%;
   border: solid 2px #fff;
+}
+#color-xplr .range.hue .cursor {
   transform: translate(-50%, 0);
 }
-
-#color-xplr .range .cursor.pin {
-  transform: translate(-50%, 0) scale(.66);
+#color-xplr .range:not(.hue) .cursor {
+  transform: translate(-50%, 0) scale(calc((16 - 2 * 2) / 16));
 }
 
 #color-xplr .range .cursor span {

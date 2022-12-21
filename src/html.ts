@@ -6,45 +6,35 @@ export const html: string = /* html */ `
     <div class="cursor"></div>
   </div>
 
+  <div class="string">
+    <input />
+  </div>
+
   <div class="ranges">
-    <div class="range hue">
+    <div class="range">
       <canvas width="256" height="1"></canvas>
       <div class="cursor"></div>
     </div>
-    <div class="range red">
+    <div class="range">
       <canvas width="256" height="1"></canvas>
-      <div class="cursor pin">
-        <span>R</span>
-      </div>
+      <div class="cursor"></div>
     </div>
-    <div class="range green">
+    <div class="range">
       <canvas width="256" height="1"></canvas>
-      <div class="cursor pin">
-        <span>G</span>
-      </div>
+      <div class="cursor"></div>
     </div>
-    <div class="range blue">
+    <div class="range">
       <canvas width="256" height="1"></canvas>
-      <div class="cursor pin">
-        <span>B</span>
-      </div>
+      <div class="cursor"></div>
     </div>
-    <div class="range luminosity">
+    <div class="range">
       <canvas width="256" height="1"></canvas>
-      <div class="cursor pin">
-        <span>L</span>
-      </div>
+      <div class="cursor"></div>
     </div>
-    <div class="range saturation">
+    <div class="range">
       <canvas width="256" height="1"></canvas>
-      <div class="cursor pin">
-        <span>S</span>
-      </div>
+      <div class="cursor"></div>
     </div>
-  </div>
-
-  <div class="string">
-    <input />
   </div>
 </div>
 `

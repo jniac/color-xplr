@@ -23,13 +23,13 @@ const createColorXplr = () => {
   
   const planeDiv = div.querySelector('.plane') as HTMLDivElement
   const plane = initPlane(color, updateColor, planeDiv)
-  const [div2, div3, div4, div5, div6, div7] = div.querySelectorAll('.ranges > div') as any as HTMLDivElement[]
-  const rangeH = initRange(color, updateColor, div2, 'hue')
-  const rangeR = initRange(color, updateColor, div3, 'red')
-  const rangeG = initRange(color, updateColor, div4, 'green')
-  const rangeB = initRange(color, updateColor, div5, 'blue')
-  const rangeL = initRange(color, updateColor, div6, 'luminosity')
-  const rangeS = initRange(color, updateColor, div7, 'saturation')
+  const divs = [...div.querySelectorAll('.ranges > div')] as HTMLDivElement[]
+  const rangeH = initRange(color, updateColor, divs.shift()!, 'hue')
+  const rangeL = initRange(color, updateColor, divs.shift()!, 'luminosity')
+  const rangeS = initRange(color, updateColor, divs.shift()!, 'saturation')
+  const rangeR = initRange(color, updateColor, divs.shift()!, 'red')
+  const rangeG = initRange(color, updateColor, divs.shift()!, 'green')
+  const rangeB = initRange(color, updateColor, divs.shift()!, 'blue')
   const stringDiv = div.querySelector('.string') as HTMLDivElement
   const string = initString(color, updateColor, stringDiv, 'hex')
   
