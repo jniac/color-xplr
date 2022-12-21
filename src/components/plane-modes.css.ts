@@ -35,11 +35,10 @@ export const planeModeCss = /* css */`
 }
 
 #color-xplr .plane .modes.right .mode {
-  border-radius: 8px;
   padding: 0 16px 0 6px;
 }
 
-#color-xplr .plane .modes .mode::before {
+#color-xplr .plane .modes .mode::after {
   --size: 7px;
   top: 5px;
   content: "";
@@ -51,24 +50,36 @@ export const planeModeCss = /* css */`
   transform: scale(.33);
 }
 
+#color-xplr .plane .modes .mode::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: .07;
+  border-radius: 8px;
+  background-color: var(--color);
+}
 
-#color-xplr .plane .modes:not(.right) .mode::before {
+
+#color-xplr .plane .modes:not(.right) .mode::after {
   left: 4px;
 }
 
-#color-xplr .plane .modes.right .mode::before {
+#color-xplr .plane .modes.right .mode::after {
   right: 4px;
 }
 
-#color-xplr .plane .modes .mode:not(.selected) {
-  background-color: #fff1;
-}
 #color-xplr .plane .modes .mode.selected {
   text-decoration: underline;
-  background-color: #fff2;
 }
 
-#color-xplr .plane .modes .mode.selected::before {
+#color-xplr .plane .modes .mode.selected::after {
   transform: none;
 }
+#color-xplr .plane .modes .mode.selected::before {
+  opacity: .15;
+}
+
 `
