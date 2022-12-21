@@ -1,9 +1,26 @@
-import { Color, Point } from '../math'
+import { Color, inout, Point } from '../math'
 import { PlaneMode, initPlaneModes } from './plane-modes'
 import { handlePointer } from './utils'
 
 const _color = new Color()
 const _color32 = _color.toColor32()
+
+const getCompInterpolation = (color: Color) => {
+  const colorComp = color.clone().hueShift(1 / 2)
+  const colorPrev = color.clone().hueShift(-1 / 6)
+  const colorNext = color.clone().hueShift(1 / 6)
+  const colorHorz = new Color()
+  const interpolate = (x: number, y: number) => {
+    if (x < .5) {
+      colorHorz.lerpColors(colorPrev, color, (x / .5) ** (1/3))
+    } else {
+      colorHorz.lerpColors(color, colorNext, ((x - .5) / .5) ** (3/1))
+    }
+    const rampY = Math.abs(y * 2 - 1) ** 2
+    _color.lerpColors(colorHorz, colorComp, rampY)
+  }
+  return interpolate
+}
 
 export const initPlane = (color: Color, updateColor: (newColor: Color) => void, div: HTMLDivElement) => {
   let mode: PlaneMode  = 'hue'
@@ -28,6 +45,11 @@ export const initPlane = (color: Color, updateColor: (newColor: Color) => void, 
         return updateColor(newColor.setRGB(x, color.g, 1 - y))
       case 'blue':
         return updateColor(newColor.setRGB(x, 1 - y, color.b))
+      case 'comp': {
+        const interpolate = getCompInterpolation(color)
+        interpolate(x, y)
+        return updateColor(newColor.copy(_color))
+      }
     }
   }, {
     skip: event => {
@@ -100,6 +122,12 @@ export const initPlane = (color: Color, updateColor: (newColor: Color) => void, 
           _color.setRGB(x, 1 - y, color.b)
         })
         cursorCoords.set(color.r, 1 - color.g)
+        break
+      }
+      case 'comp': {
+        console.log(color.toCss())
+        updateImage(getCompInterpolation(color))
+        cursorCoords.set(.5, .5)
         break
       }
     }

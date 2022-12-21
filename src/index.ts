@@ -1,11 +1,21 @@
 import { css } from './style.css'
 import { html } from './html'
 import { Color } from './math/color'
+import { createStore } from './store'
 import { initRange } from './components/range'
 import { initPlane } from './components/plane'
 import { initString } from './components/string'
 
-const createColorXplr = () => {
+type CreateColorXplrArgs = Partial<{
+  /** The key used for local storage of preferences. */
+  storeKey: string
+}>
+
+const createColorXplr = ({ 
+  storeKey = 'color-xplr'
+}: CreateColorXplrArgs = {}) => {
+  const store = createStore(storeKey)
+
   const div = document.createElement('div')
   div.innerHTML = html
   div.id = 'color-xplr'
@@ -14,11 +24,12 @@ const createColorXplr = () => {
   style.innerHTML = css
   document.head.append(style)
 
-  const color = new Color().setHex(0xffcc00)
+  const color = new Color().setHex(store.get('color') ?? 0xffcc00)
 
   const updateColor = (newColor: Color) => {
     color.copy(newColor)
     update()
+    store.set('color', newColor.toHex())
   }
   
   const planeDiv = div.querySelector('.plane') as HTMLDivElement

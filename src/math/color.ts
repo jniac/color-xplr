@@ -1,4 +1,4 @@
-import { clamp01, positiveModulo, to0xff } from './utils'
+import { clamp01, lerpUnclamped, positiveModulo, to0xff } from './utils'
 
 const apply_cxm = (h: number, c: number, x: number, m: number, out = { r: 0, g: 0, b: 0 }) => {
   if (h < 1 / 6) {
@@ -226,6 +226,43 @@ export class Color {
       return this.setHSL(arg.h, arg.s, arg.l, arg.a)
     }
     throw new Error(`Invalid argument: ${arg}`)
+  }
+
+  lerpColors(color1: Color, color2: Color, alpha: number, mode: 'rgb' | 'hsl' | 'hsv' = 'rgb') {
+    switch(mode) {
+      case 'rgb': {
+        this.r = lerpUnclamped(color1.r, color2.r, alpha)
+        this.g = lerpUnclamped(color1.g, color2.g, alpha)
+        this.b = lerpUnclamped(color1.b, color2.b, alpha)
+        this.a = lerpUnclamped(color1.a, color2.a, alpha)
+        break
+      }
+      case 'hsl': {
+        const h = lerpUnclamped(color1.hsl.h, color2.hsl.h, alpha)
+        const s = lerpUnclamped(color1.hsl.s, color2.hsl.s, alpha)
+        const l = lerpUnclamped(color1.hsl.l, color2.hsl.l, alpha)
+        const a = lerpUnclamped(color1.a, color2.a, alpha)
+        this.setHSL(h, s, l, a)
+        break
+      }
+      case 'hsv': {
+        const h = lerpUnclamped(color1.hsv.h, color2.hsv.h, alpha)
+        const s = lerpUnclamped(color1.hsv.s, color2.hsv.s, alpha)
+        const v = lerpUnclamped(color1.hsv.v, color2.hsv.v, alpha)
+        const a = lerpUnclamped(color1.a, color2.a, alpha)
+        this.setHSV(h, s, v, a)
+        break
+      }
+      default: {
+        throw new Error(`Invalid mode: "${mode}"`)
+      }
+    }
+    return this
+  }
+
+  hueShift(delta: number) {
+    const { h, s, l } = this.hsl
+    return this.setHSL(positiveModulo(h + delta, 1), s, l)
   }
 
   toColor32(out = { r: 0, g: 0, b: 0, a: 1 }) {

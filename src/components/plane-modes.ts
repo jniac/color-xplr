@@ -1,6 +1,6 @@
 import { Point } from '../math'
 
-const planeModes = ['hue', 'red', 'green', 'blue'] as const
+const planeModes = ['hue', 'red', 'green', 'blue', 'comp'] as const
 export type PlaneMode = (typeof planeModes)[number]
 
 export const initPlaneModes = (div: HTMLDivElement, currentMode: PlaneMode) => {
