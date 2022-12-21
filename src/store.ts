@@ -1,3 +1,4 @@
+import { Store } from './type'
 
 const load = (key: string) => {
   const str = window.localStorage.getItem(key)
@@ -18,11 +19,6 @@ const load = (key: string) => {
 
 const save = (key: string, store: any) => {
   window.localStorage.setItem(key, JSON.stringify(store))
-}
-
-export type Store = {
-  get: (key: string) => any
-  set: (key: string, value: any) => void
 }
 
 export const createStore = (storeKey: string): Store => {

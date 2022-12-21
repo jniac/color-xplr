@@ -1,6 +1,7 @@
 import { Point } from '../math'
+import { InterpolationXY } from '../type'
 
-const planeModes = ['hue', 'red', 'green', 'blue', 'comp'] as const
+const planeModes = ['hue', 'red', 'green', 'blue', 'shift'] as const
 export type PlaneMode = (typeof planeModes)[number]
 
 export const initPlaneModes = (div: HTMLDivElement, currentMode: PlaneMode) => {
@@ -14,18 +15,20 @@ export const initPlaneModes = (div: HTMLDivElement, currentMode: PlaneMode) => {
     modes.appendChild(div)
   }
 
-  const update = (currentMode: PlaneMode, cursorCoords: Point) => {
+  const update = (currentMode: PlaneMode, cursorCoords: Point, interpolateXY: InterpolationXY) => {
     const children = modes.children as any as HTMLDivElement[]
     for (const div of children) {
       const selected = div.dataset.mode === currentMode
       div.classList.toggle('selected', selected)
     }
-    if (cursorCoords.x < .25 && cursorCoords.y > .75) {
+    const right = cursorCoords.x < .25 && cursorCoords.y > .75
+    if (right) {
       modes.classList.add('right')
-    }
-    if (cursorCoords.x > .75 && cursorCoords.y > .75) {
+    } else {
       modes.classList.remove('right')
     }
+    const colorCss = interpolateXY(right ? .775 : .125, .875).toGrayscale() < .5 ? 'white' : 'black'
+    modes.style.setProperty('--color', colorCss)
   }
 
   return {

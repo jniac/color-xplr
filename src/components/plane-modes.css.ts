@@ -1,5 +1,6 @@
 export const planeModeCss = /* css */`
 #color-xplr .plane .modes {
+  --color: white;
   position: absolute;
   bottom: 0;
   width: 100%;
@@ -7,7 +8,7 @@ export const planeModeCss = /* css */`
   display: flex;
   flex-direction: column;
   font-size: .75em;
-  color: white;
+  color: var(--color);
   pointer-events: none;
 }
 
@@ -45,7 +46,7 @@ export const planeModeCss = /* css */`
   position: absolute;
   width: var(--size);
   height: var(--size);
-  background-color: white;
+  background-color: var(--color);
   border-radius: 50%;
   transform: scale(.33);
 }

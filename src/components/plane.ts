@@ -1,4 +1,5 @@
-import { Color, inout, Point } from '../math'
+import { Color, inout, lerpUnclamped, moduloShortLerp, Point } from '../math'
+import { ColorXplrApp, InterpolationXY } from '../type'
 import { PlaneMode, initPlaneModes } from './plane-modes'
 import { handlePointer } from './utils'
 
@@ -6,24 +7,34 @@ const _color = new Color()
 const _color32 = _color.toColor32()
 
 const getCompInterpolation = (color: Color) => {
-  const colorComp = color.clone().hueShift(1 / 2)
-  const colorPrev = color.clone().hueShift(-1 / 6)
-  const colorNext = color.clone().hueShift(1 / 6)
-  const colorHorz = new Color()
-  const interpolate = (x: number, y: number) => {
+  const colorPrev = color.clone().hueShift(-1 / 8)
+  const colorNext = color.clone().hueShift(1 / 8)
+  const interpolate: InterpolationXY = (x, y) => {
     if (x < .5) {
-      colorHorz.lerpColors(colorPrev, color, (x / .5) ** (1/3))
+      const t = x / .5
+      _color.lerpColors(colorPrev, color, t ** .5, 'hsl')
+      
     } else {
-      colorHorz.lerpColors(color, colorNext, ((x - .5) / .5) ** (3/1))
+      const t = (x - .5) / .5
+      _color.lerpColors(color, colorNext, t ** 2, 'hsl')
     }
-    const rampY = Math.abs(y * 2 - 1) ** 2
-    _color.lerpColors(colorHorz, colorComp, rampY)
+    if (y < .5) {
+      const t = y / .5
+      _color.setSaturation(color.hsl.s * t)
+    } else {
+      const t = (y - .5) / .5
+      _color.setSaturation(lerpUnclamped(color.hsl.s, 1, t))
+    }
+    return _color
   }
   return interpolate
 }
 
-export const initPlane = (color: Color, updateColor: (newColor: Color) => void, div: HTMLDivElement) => {
-  let mode: PlaneMode  = 'hue'
+export const initPlane = (app: ColorXplrApp, div: HTMLDivElement) => {
+  const { color, store, updateColor } = app
+  
+  let mode: PlaneMode  = store.get('plane-mode') ?? 'hue'
+
   const canvas = div.querySelector('canvas') as HTMLCanvasElement
   const cursor = div.querySelector('.cursor') as HTMLDivElement
   const cursorCoords = new Point()
@@ -45,7 +56,7 @@ export const initPlane = (color: Color, updateColor: (newColor: Color) => void, 
         return updateColor(newColor.setRGB(x, color.g, 1 - y))
       case 'blue':
         return updateColor(newColor.setRGB(x, 1 - y, color.b))
-      case 'comp': {
+      case 'shift': {
         const interpolate = getCompInterpolation(color)
         interpolate(x, y)
         return updateColor(newColor.copy(_color))
@@ -56,6 +67,7 @@ export const initPlane = (color: Color, updateColor: (newColor: Color) => void, 
       const shouldSkip = event.target !== canvas && event.target !== cursor
       if (shouldSkip) {
         mode = (event.target as any).dataset.mode
+        store.set('plane-mode', mode)
         update()
       }
       return shouldSkip
@@ -95,44 +107,45 @@ export const initPlane = (color: Color, updateColor: (newColor: Color) => void, 
   }
 
   const update = () => {
+    let interpolateXY: InterpolationXY = (x, y) => _color.setRGB(1, 1, 1)
     switch(mode) {
       case 'hue': {
-        updateImage((x, y) => {
-          _color.setHSV(color.hsv.h, x, 1 - y)
-        })
+        interpolateXY = (x, y) => {
+          return _color.setHSV(color.hsv.h, x, 1 - y)
+        }
         cursorCoords.set(color.hsv.s, 1 - color.hsv.v)
         break
       }
       case 'red': {
-        updateImage((x, y) => {
-          _color.setRGB(color.r, x, 1 - y)
-        })
+        interpolateXY = (x, y) => {
+          return _color.setRGB(color.r, x, 1 - y)
+        }
         cursorCoords.set(color.g, 1 - color.b)
         break
       }
       case 'green': {
-        updateImage((x, y) => {
-          _color.setRGB(x, color.g, 1 - y)
-        })
+        interpolateXY = (x, y) => {
+          return _color.setRGB(x, color.g, 1 - y)
+        }
         cursorCoords.set(color.r, 1 - color.b)
         break
       }
       case 'blue': {
-        updateImage((x, y) => {
-          _color.setRGB(x, 1 - y, color.b)
-        })
+        interpolateXY = (x, y) => {
+          return _color.setRGB(x, 1 - y, color.b)
+        }
         cursorCoords.set(color.r, 1 - color.g)
         break
       }
-      case 'comp': {
-        console.log(color.toCss())
-        updateImage(getCompInterpolation(color))
+      case 'shift': {
+        interpolateXY = getCompInterpolation(color)
         cursorCoords.set(.5, .5)
         break
       }
     }
+    updateImage(interpolateXY)
     updateCursor()
-    modes.update(mode, cursorCoords)
+    modes.update(mode, cursorCoords, interpolateXY)
 }
 
   return {

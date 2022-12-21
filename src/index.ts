@@ -5,6 +5,7 @@ import { createStore } from './store'
 import { initRange } from './components/range'
 import { initPlane } from './components/plane'
 import { initString } from './components/string'
+import { ColorXplrApp } from './type'
 
 type CreateColorXplrArgs = Partial<{
   /** The key used for local storage of preferences. */
@@ -13,7 +14,7 @@ type CreateColorXplrArgs = Partial<{
 
 const createColorXplr = ({ 
   storeKey = 'color-xplr'
-}: CreateColorXplrArgs = {}) => {
+}: CreateColorXplrArgs = {}): ColorXplrApp => {
   const store = createStore(storeKey)
 
   const div = document.createElement('div')
@@ -32,17 +33,35 @@ const createColorXplr = ({
     store.set('color', newColor.toHex())
   }
   
+  let destroyed = false
+  const destroy = () => {
+    if (destroyed === false) {
+      destroyed = true
+      style.remove()
+      div.remove()
+    }
+  }
+
+  const app: ColorXplrApp = Object.freeze({
+    div,
+    color,
+    updateColor,
+    store,
+    destroy,
+    get destroyed() { return destroyed },
+  })
+
   const planeDiv = div.querySelector('.plane') as HTMLDivElement
-  const plane = initPlane(color, updateColor, planeDiv)
+  const plane = initPlane(app, planeDiv)
   const divs = [...div.querySelectorAll('.ranges > div')] as HTMLDivElement[]
-  const rangeH = initRange(color, updateColor, divs.shift()!, 'hue')
-  const rangeL = initRange(color, updateColor, divs.shift()!, 'luminosity')
-  const rangeS = initRange(color, updateColor, divs.shift()!, 'saturation')
-  const rangeR = initRange(color, updateColor, divs.shift()!, 'red')
-  const rangeG = initRange(color, updateColor, divs.shift()!, 'green')
-  const rangeB = initRange(color, updateColor, divs.shift()!, 'blue')
+  const rangeH = initRange(app, divs.shift()!, 'hue')
+  const rangeL = initRange(app, divs.shift()!, 'luminosity')
+  const rangeS = initRange(app, divs.shift()!, 'saturation')
+  const rangeR = initRange(app, divs.shift()!, 'red')
+  const rangeG = initRange(app, divs.shift()!, 'green')
+  const rangeB = initRange(app, divs.shift()!, 'blue')
   const stringDiv = div.querySelector('.string') as HTMLDivElement
-  const string = initString(color, updateColor, stringDiv, 'hex')
+  const string = initString(app, stringDiv, 'hex')
   
   const update = () => {
     plane.update()
@@ -58,20 +77,7 @@ const createColorXplr = ({
   update()
   window.requestAnimationFrame(update)
 
-  let destroyed = false
-  const destroy = () => {
-    if (destroyed === false) {
-      destroyed = true
-      style.remove()
-      div.remove()
-    }
-  }
-
-  return {
-    div,
-    color,
-    destroy,
-  }
+  return app
 }
 
 export {
