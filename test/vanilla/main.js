@@ -1,7 +1,15 @@
 import { createColorXplr, Color } from '../../lib/index.js'
 
-const colorXplr = createColorXplr()
-document.body.append(colorXplr.div)
-
-const { color } = colorXplr
-Object.assign(window, { Color, color })
+const input = document.querySelector('input') 
+input.addEventListener('click', event => {
+  event.preventDefault()
+  createColorXplr({
+    modal: {
+      source: input,
+    },
+    onChange: (hex, color) => {
+      input.value = hex
+      document.body.style.backgroundColor = color.toCss()
+    },
+  })
+})
