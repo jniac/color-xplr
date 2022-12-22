@@ -1,7 +1,9 @@
 import { Store } from './type'
 
+const keyPrefix = 'color-xplr'
+
 const load = (key: string) => {
-  const str = window.localStorage.getItem(key)
+  const str = window.localStorage.getItem(`${keyPrefix}-${key}`)
   if (str) {
     try {
       const value = JSON.parse(str)
@@ -18,7 +20,7 @@ const load = (key: string) => {
 }
 
 const save = (key: string, store: any) => {
-  window.localStorage.setItem(key, JSON.stringify(store))
+  window.localStorage.setItem(`${keyPrefix}-${key}`, JSON.stringify(store))
 }
 
 export const createStore = (storeKey: string): Store => {

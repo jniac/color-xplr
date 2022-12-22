@@ -1,6 +1,6 @@
 import { Color, inout, lerpUnclamped, moduloShortLerp, Point } from '../math'
-import { ColorXplrApp, InterpolationXY } from '../type'
-import { PlaneMode, initPlaneModes } from './plane-modes'
+import { ColorXplrApp, InterpolationXY, PlaneMode } from '../type'
+import { initPlaneModes } from './plane-modes'
 import { handlePointer } from './utils'
 
 const _color = new Color()

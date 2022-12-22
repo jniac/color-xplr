@@ -218,12 +218,29 @@ export class Color {
     return this.setRGB(r, g, b)
   }
 
-  set(arg: { r: number; g: number; b: number; a?: number } | { h: number; s: number; l: number; a?: number }) {
-    if ('r' in arg) {
-      return this.setRGB(arg.r, arg.g, arg.b, arg.a)
+  fromCss(str: string) {
+    if (/^#?[0-9a-f]{6}$/i.test(str)) {
+      return this.setHex(Number.parseInt(str.slice(-6), 16))
     }
-    if ('h' in arg) {
-      return this.setHSL(arg.h, arg.s, arg.l, arg.a)
+    throw new Error(`Unsupported string format: "${str}"`)
+  }
+
+  set(arg: string | number | { r: number; g: number; b: number; a?: number } | { h: number; s: number; l: number; a?: number }) {
+    switch(typeof arg) {
+      case 'string': {
+        return this.fromCss(arg)
+      }
+      case 'number': {
+        return this.setHex(arg)
+      }
+      case 'object': {
+        if ('r' in arg) {
+          return this.setRGB(arg.r, arg.g, arg.b, arg.a)
+        }
+        if ('h' in arg) {
+          return this.setHSL(arg.h, arg.s, arg.l, arg.a)
+        }
+      }
     }
     throw new Error(`Invalid argument: ${arg}`)
   }

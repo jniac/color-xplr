@@ -10,10 +10,20 @@ import { ColorXplrApp } from './type'
 type CreateColorXplrArgs = Partial<{
   /** The key used for local storage of preferences. */
   storeKey: string
+  modal: {
+    source: HTMLElement
+    container?: HTMLElement
+    zIndex?: number
+  }
+  color: string
+  onChange: (hexString: string, color: Color) => void,
 }>
 
 const createColorXplr = ({ 
-  storeKey = 'color-xplr'
+  storeKey = 'color-xplr',
+  color: initialColor,
+  modal,
+  onChange,
 }: CreateColorXplrArgs = {}): ColorXplrApp => {
   const store = createStore(storeKey)
 
@@ -25,12 +35,13 @@ const createColorXplr = ({
   style.innerHTML = css
   document.head.append(style)
 
-  const color = new Color().setHex(store.get('color') ?? 0xffcc00)
+  const color = new Color().set(initialColor ?? store.get('color') ?? '#e9e59a')
 
   const updateColor = (newColor: Color) => {
     color.copy(newColor)
     update()
     store.set('color', newColor.toHex())
+    onChange?.(newColor.toCss(), color)
   }
   
   let destroyed = false
@@ -77,7 +88,25 @@ const createColorXplr = ({
   update()
   window.requestAnimationFrame(update)
 
+  if (modal) {
+    createModal(app, modal)
+  }
+
   return app
+}
+
+const createModal = (app: ColorXplrApp, modal: NonNullable<CreateColorXplrArgs['modal']>) => {
+
+  const {
+    container = document.body,
+    zIndex = 10,
+  } = modal
+
+  const div = document.createElement('div')
+  div.id = 'color-xplr-modal'
+  div.style.zIndex = String(zIndex)
+  div.append(app.div)
+  container.append(div)
 }
 
 export {

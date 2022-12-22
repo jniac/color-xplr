@@ -45,4 +45,12 @@ ${stringCss}
   background-color: transparent;
   padding: 32px 0;
 }
+
+#color-xplr-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
 `

@@ -4,6 +4,7 @@ const input = document.querySelector('input')
 input.addEventListener('click', event => {
   event.preventDefault()
   createColorXplr({
+    color: input.value,
     modal: {
       source: input,
     },

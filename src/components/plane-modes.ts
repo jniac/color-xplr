@@ -1,8 +1,9 @@
 import { Point } from '../math'
-import { InterpolationXY } from '../type'
+import { InterpolationXY, PlaneMode } from '../type'
 
-const planeModes = ['hue', 'red', 'green', 'blue', 'shift'] as const
-export type PlaneMode = (typeof planeModes)[number]
+const planeModes = Object
+  .values(PlaneMode)
+  .filter(value => value !== PlaneMode.shift)
 
 export const initPlaneModes = (div: HTMLDivElement, currentMode: PlaneMode) => {
   const modes = div.querySelector('.modes') as HTMLDivElement
