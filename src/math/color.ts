@@ -210,7 +210,7 @@ export class Color {
     return this
   }
 
-  setHex(hex: number) {
+  fromHex(hex: number) {
     hex = Math.floor(hex)
     const r = (hex >> 16 & 255) / 255
     const g = (hex >> 8 & 255) / 255
@@ -220,7 +220,7 @@ export class Color {
 
   fromCss(str: string) {
     if (/^#?[0-9a-f]{6}$/i.test(str)) {
-      return this.setHex(Number.parseInt(str.slice(-6), 16))
+      return this.fromHex(Number.parseInt(str.slice(-6), 16))
     }
     throw new Error(`Unsupported string format: "${str}"`)
   }
@@ -231,7 +231,7 @@ export class Color {
         return this.fromCss(arg)
       }
       case 'number': {
-        return this.setHex(arg)
+        return this.fromHex(arg)
       }
       case 'object': {
         if ('r' in arg) {
@@ -286,6 +286,25 @@ export class Color {
   setSaturation(value: number) {
     const { h, l } = this.hsl
     return this.setHSL(h, value, l)
+  }
+
+  negate(mode: 'rgb' | 'hsl' | 'hsv' = 'rgb') {
+    switch(mode) {
+      case 'rgb': {
+        return this.setRGB(1 - this.r, 1 - this.g, 1 - this.b)
+      }
+      case 'hsl': {
+        const { h, s, l } = this.hsl
+        return this.setHSL((h + .5) % 1, 1 - s, 1 - l)
+      }
+      case 'hsv': {
+        const { h, s, v } = this.hsv
+        return this.setHSV((h + .5) % 1, 1 - s, 1 - v)
+      }
+      default: {
+        throw new Error(`Invalid mode: "${mode}"`)
+      }
+    }
   }
 
   toColor32(out = { r: 0, g: 0, b: 0, a: 1 }) {

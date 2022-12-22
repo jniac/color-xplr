@@ -26,7 +26,7 @@ export const initString = (app: ColorXplrApp, div: HTMLDivElement, mode: StringM
   input.addEventListener('input', () => {
     const str = input.value.replace('#', '')
     if (str.length === 6) {
-      const newColor = new Color().setHex(Number.parseInt(str, 16))
+      const newColor = new Color().fromHex(Number.parseInt(str, 16))
       updateColor(newColor)
     }
   })
