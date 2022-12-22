@@ -4,7 +4,7 @@
  * An object that could be destroyed (instance.destroy()).
  */
 export type Destroyable = {
-  destroy: () => boolean
+  destroy: () => void | boolean
 }
 
 /**
@@ -92,7 +92,13 @@ export class Node implements Destroyable {
     }
     return false
   }
-  onDestroy(callback: NodeCallback) {
+  bind(...targets: Destroyable[]) {
+    for (const target of targets) {
+      this.onDestroy(target.destroy)
+    }
+    return this
+  }
+  onDestroy(callback: NodeCallback): Destroyable {
     return this.on('destroy', callback)
   }
   onUpdate(callback: NodeCallback) {

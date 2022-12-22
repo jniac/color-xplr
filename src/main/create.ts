@@ -5,8 +5,8 @@ import { createStore } from '../core/store'
 import { initRange } from '../components/range'
 import { initPlane } from '../components/plane'
 import { initString } from '../components/string'
-import { onDirectTap } from './utils'
 import { ColorXplrApp, Root } from './root'
+import { createModal } from './modal'
 
 /**
  * @public
@@ -20,29 +20,9 @@ export type CreateColorXplrArgs = Partial<{
     zIndex?: number
   }
   color: string
-  onChange: (hexString: string, color: Color) => void
-  onDestroy: (hexString: string, color: Color) => void
+  onChange: (app: ColorXplrApp) => void
+  onDestroy: (app: ColorXplrApp) => void
 }>
-
-const createModal = (app: Root, modal: NonNullable<CreateColorXplrArgs['modal']>) => {
-  const {
-    container = document.body, zIndex = 10,
-  } = modal
-
-  const div = document.createElement('div')
-  div.id = 'color-xplr-modal'
-  div.style.zIndex = String(zIndex)
-  div.append(app.div)
-  container.append(div)
-
-  app.onDestroy(() => {
-    div.remove()
-  })
-
-  onDirectTap(div, () => {
-    app.destroy()
-  })
-}
 
 /**
  * Create a Color Xplr dom element.
@@ -50,7 +30,7 @@ const createModal = (app: Root, modal: NonNullable<CreateColorXplrArgs['modal']>
  */
 export const createColorXplr = ({
   storeKey = 'color-xplr', 
-  color: initialColor, 
+  color: initialColorStr, 
   modal, 
   onChange,
   onDestroy,
@@ -65,7 +45,8 @@ export const createColorXplr = ({
   style.innerHTML = css
   document.head.append(style)
 
-  const color = new Color().set(initialColor ?? store.get('color') ?? '#e9e59a')
+  const initialColor = new Color().set(initialColorStr ?? store.get('color') ?? '#e9e59a')
+  const color = initialColor.clone()
 
   const updateColor = (newColor: Color) => {
     color.copy(newColor)
@@ -73,7 +54,7 @@ export const createColorXplr = ({
     store.set('color', newColor.toHex())
   }
 
-  const root = new Root(div, color, store, updateColor)
+  const root = new Root(div, store, initialColor, color, updateColor)
   root.onDestroy(() => {
     style.remove()
     div.remove()
@@ -102,10 +83,10 @@ export const createColorXplr = ({
     createModal(root, modal)
   }
 
-  const app = new ColorXplrApp(color)
+  const app = new ColorXplrApp(initialColor, color)
   root.add(app)
-  app.onUpdate(() => onChange?.(color.toCss(), color))
-  app.onDestroy(() => onDestroy?.(color.toCss(), color))
+  app.onUpdate(() => onChange?.(app))
+  app.onDestroy(() => onDestroy?.(app))
 
   return app
 }

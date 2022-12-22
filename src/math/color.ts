@@ -154,6 +154,15 @@ export class Color {
     v: 1,
   }
 
+  isEquivalent(other: Color) {
+    return (
+      this.r === other.r
+      && this.g === other.g
+      && this.b === other.b
+      && this.a === other.a  
+    )    
+  }
+
   copy(other: Color) {
     this.r = other.r
     this.g = other.g

@@ -1,4 +1,4 @@
-import { createColorXplr, Color } from '../../lib/index.js'
+import { createColorXplr } from '../../lib/index.js'
 
 const input = document.querySelector('input') 
 input.addEventListener('click', event => {
@@ -8,14 +8,18 @@ input.addEventListener('click', event => {
     modal: {
       source: input,
     },
-    onChange: (hex, color) => {
+    onChange: app => {
+      const hex = app.color.toCss()
       input.value = hex
-      document.body.style.backgroundColor = color.toCss()
-      document.body.querySelector('h1').style.color = color.clone().negate('hsl').toCss()
+      document.body.style.backgroundColor = hex
+      document.body.querySelector('h1').style.color = app.color.clone().negate('hsl').toCss()
     },
-    onDestroy: (hex, color) => {
-      const negative = color.clone().negate('hsl').toCss()
-      document.body.querySelector('.log').innerHTML += `<div style="color: ${negative}; background-color: ${hex}">color has changed: "${hex}"</div>`
+    onDestroy: app => {
+      if (app.colorHasChanged) {
+        const hex = app.color.toCss()
+        const negative = app.color.clone().negate('hsl').toCss()
+        document.body.querySelector('.log').innerHTML += `<div style="color: ${negative}; background-color: ${hex}">color has changed: "${hex}"</div>`
+      }
     },
   })
 })
