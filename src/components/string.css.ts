@@ -17,7 +17,7 @@ export const stringCss = /* css */`
 #color-xplr .string .copy {
   --size: 16px;
   top: calc(50% - var(--size) / 2);
-  right: 8px;
+  right: 16px;
   width: var(--size);
   height: var(--size);
   position: absolute;
