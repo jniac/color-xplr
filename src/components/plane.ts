@@ -1,5 +1,6 @@
-import { Color, inout, lerpUnclamped, moduloShortLerp, Point } from '../math'
-import { ColorXplrApp, InterpolationXY, PlaneMode } from '../type'
+import { Root } from '../main/root'
+import { Color, lerpUnclamped, Point } from '../math'
+import { InterpolationXY, PlaneMode } from '../main/type'
 import { initPlaneModes } from './plane-modes'
 import { handlePointer } from './utils'
 
@@ -13,7 +14,7 @@ const getCompInterpolation = (color: Color) => {
     if (x < .5) {
       const t = x / .5
       _color.lerpColors(colorPrev, color, t ** .5, 'hsl')
-      
+
     } else {
       const t = (x - .5) / .5
       _color.lerpColors(color, colorNext, t ** 2, 'hsl')
@@ -30,10 +31,10 @@ const getCompInterpolation = (color: Color) => {
   return interpolate
 }
 
-export const initPlane = (app: ColorXplrApp, div: HTMLDivElement) => {
-  const { color, store, updateColor } = app
-  
-  let mode: PlaneMode  = store.get('plane-mode') ?? 'hue'
+export const initPlane = (root: Root, div: HTMLDivElement) => {
+  const { color, store, updateColor } = root
+
+  let mode: PlaneMode = store.get('plane-mode') ?? 'hue'
 
   const canvas = div.querySelector('canvas') as HTMLCanvasElement
   const cursor = div.querySelector('.cursor') as HTMLDivElement
@@ -47,7 +48,7 @@ export const initPlane = (app: ColorXplrApp, div: HTMLDivElement) => {
 
   const newColor = new Color()
   const pointerHandler = handlePointer(div, 0, ({ x, y }) => {
-    switch(mode) {
+    switch (mode) {
       case 'hue':
         return updateColor(newColor.setHSV(color.hsv.h, x, 1 - y))
       case 'red':
@@ -108,7 +109,7 @@ export const initPlane = (app: ColorXplrApp, div: HTMLDivElement) => {
 
   const update = () => {
     let interpolateXY: InterpolationXY = (x, y) => _color.setRGB(1, 1, 1)
-    switch(mode) {
+    switch (mode) {
       case 'hue': {
         interpolateXY = (x, y) => {
           return _color.setHSV(color.hsv.h, x, 1 - y)
@@ -146,11 +147,8 @@ export const initPlane = (app: ColorXplrApp, div: HTMLDivElement) => {
     updateImage(interpolateXY)
     updateCursor()
     modes.update(mode, cursorCoords, interpolateXY)
-}
-
-  return {
-    get updateDuration() { return updateDuration },
-    update,
-    destroy,
   }
+
+  root.onDestroy(destroy)
+  root.onUpdate(update)
 }

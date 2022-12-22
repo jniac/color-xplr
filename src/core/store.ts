@@ -1,4 +1,4 @@
-import { Store } from './type'
+import { Store } from '../main/type'
 
 const keyPrefix = 'color-xplr'
 

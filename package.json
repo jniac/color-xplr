@@ -4,7 +4,7 @@
   "description": "It's a color picker for the browser. But a cool one.",
   "main": "lib/index.js",
   "module": "lib/index.js",
-  "types": "lib-types/index.d.ts",
+  "types": "lib/index.d.ts",
   "scripts": {
     "start": "node dev.mjs",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@microsoft/api-extractor": "^7.33.7",
     "chokidar": "^3.5.3",
     "esbuild": "0.16.7",
     "fs-extra": "^11.1.0",

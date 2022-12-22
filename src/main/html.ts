@@ -1,4 +1,4 @@
-import { copySvg } from './assets/copy.svg'
+import { copySvg } from '../assets/copy.svg'
 
 export const html: string = /* html */ `
 <div class="colors">

@@ -1,5 +1,5 @@
 import { Point } from '../math'
-import { InterpolationXY, PlaneMode } from '../type'
+import { InterpolationXY, PlaneMode } from '../main/type'
 
 const planeModes = Object
   .values(PlaneMode)

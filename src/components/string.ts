@@ -1,13 +1,13 @@
 import { Color } from '../math/color'
-import { ColorXplrApp } from '../type'
+import { Root } from '../main/root'
 
 type StringMode = 'hex' | 'rgb'
 
-export const initString = (app: ColorXplrApp, div: HTMLDivElement, mode: StringMode) => {
+export const initString = (root: Root, div: HTMLDivElement, mode: StringMode) => {
   const input = div.querySelector('input') as HTMLInputElement
   const copy = div.querySelector('.copy') as HTMLDivElement
  
-  const { color, updateColor } = app
+  const { color, updateColor } = root
 
   copy.onclick = () => {
     div.classList.add('flash')
@@ -31,7 +31,5 @@ export const initString = (app: ColorXplrApp, div: HTMLDivElement, mode: StringM
     }
   })
 
-  return {
-    update,
-  }
+  root.onUpdate(update)
 }

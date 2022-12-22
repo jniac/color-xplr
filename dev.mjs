@@ -3,6 +3,11 @@ import chokidar from 'chokidar'
 import fs from 'fs-extra'
 import { promisify } from 'util'
 import { exec } from 'child_process'
+import {
+  Extractor,
+  ExtractorConfig,
+  ExtractorResult
+} from '@microsoft/api-extractor'
 
 const asyncExec = promisify(exec)
 
@@ -30,7 +35,7 @@ const build = async () => {
   }
 
   await log.watch('esbuild', async () => {
-    const rslt = await esbuild.build({
+    await esbuild.build({
       entryPoints: ['src/index.ts'],
       outdir: 'lib',
       bundle: true,
@@ -44,7 +49,7 @@ const build = async () => {
 
   await log.watch('tsc', async () => {
     try {
-      const { stderr } = await asyncExec('npx tsc --declaration  --emitDeclarationOnly --outDir lib-types')
+      const { stderr } = await asyncExec('npx tsc --declaration  --emitDeclarationOnly --outDir tmp')
       if (stderr) {
         console.error(stderr)
       }
@@ -52,6 +57,21 @@ const build = async () => {
       console.error(error)
     }
   })
+
+  await log.watch('api-extractor', async () => {
+    try {
+      const { stderr } = await asyncExec('npx api-extractor run --local')
+      if (stderr) {
+        console.error(stderr)
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  })
+
+  await fs.move('dist/color-xplr.d.ts', 'lib/index.d.ts')
+  await fs.rm('tmp', { recursive: true })
+  await fs.rm('dist', { recursive: true })
 }
 
 chokidar.watch('src').on('change', async () => {

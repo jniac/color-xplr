@@ -18,3 +18,10 @@ body {
   font-family: 'Fira Code', monospace;
   background-color: #ddd;
 }
+
+.log {
+  margin-top: 8px;
+}
+.log > div {
+  padding: 2px 4px;
+}

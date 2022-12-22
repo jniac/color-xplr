@@ -132,6 +132,10 @@ const rgb_to_grayscale = (r: number, g: number, b: number) => {
   return 0.21 * r + 0.72 * g + 0.07 * b
 }
 
+/**
+ * @public
+ * Utility class that represents a color (rgba + hsl / hsv).
+ */
 export class Color {
   r = 1
   g = 1

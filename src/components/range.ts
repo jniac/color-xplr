@@ -1,7 +1,7 @@
 import { Color } from '../math/color'
 import { clamp01 } from '../math/utils'
-import { ColorXplrApp } from '../type'
-import { computeEventXY, handlePointer } from './utils'
+import { Root } from '../main/root'
+import { handlePointer } from './utils'
 
 const rangeModes = ['hue', 'red', 'green', 'blue', 'luminosity', 'saturation'] as const
 type RangeMode = (typeof rangeModes)[number]
@@ -9,7 +9,7 @@ type RangeMode = (typeof rangeModes)[number]
 const _color = new Color()
 const _color32 = _color.toColor32()
 
-export const initRange = (app: ColorXplrApp, div: HTMLDivElement, mode: RangeMode) => {
+export const initRange = (root: Root, div: HTMLDivElement, mode: RangeMode) => {
   div.classList.add(mode)
   const canvas = div.querySelector('canvas') as HTMLCanvasElement
   const cursor = div.querySelector('.cursor') as HTMLDivElement
@@ -24,7 +24,7 @@ export const initRange = (app: ColorXplrApp, div: HTMLDivElement, mode: RangeMod
 
   const margin = 8
 
-  const { color, updateColor } = app
+  const { color, updateColor } = root
   const newColor = new Color()
   const pointerHandler = handlePointer(div, margin, ({ x }) => {
     switch(mode) {
@@ -42,6 +42,8 @@ export const initRange = (app: ColorXplrApp, div: HTMLDivElement, mode: RangeMod
         return updateColor(newColor.setHSL(color.hsl.h, x, color.hsl.l))
     }
   })
+
+  
 
   const destroy = () => {
     pointerHandler.destroy()
@@ -132,9 +134,6 @@ export const initRange = (app: ColorXplrApp, div: HTMLDivElement, mode: RangeMod
     }
   }
 
-  return {
-    get updateDuration() { return updateDuration },
-    update,
-    destroy,
-  }
+  root.onDestroy(destroy)
+  root.onUpdate(update)
 }
