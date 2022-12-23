@@ -29,6 +29,14 @@ const log = {
   },
 }
 
+const changeMainEntryPointFilePath = async (tmp) => {
+  let apiExtractorJson = await fs.readFile('api-extractor.json', 'utf-8')
+  const mainEntryPointFilePath = `"mainEntryPointFilePath": "<projectFolder>/${tmp}/index.d.ts"`
+  const re = /"mainEntryPointFilePath": "<projectFolder>\/[\w\-]+\/index.d.ts"/
+  apiExtractorJson = apiExtractorJson.replace(re, mainEntryPointFilePath)
+  await fs.writeFile('api-extractor.json', apiExtractorJson, 'utf-8')  
+}
+
 const build = async () => {
   if (await fs.pathExists('lib')) {
     await fs.rm('lib', { recursive: true })
@@ -47,9 +55,11 @@ const build = async () => {
     })
   })
 
+  const tmp = `tmp-${Date.now()}`
+
   await log.watch('tsc', async () => {
     try {
-      const { stderr } = await asyncExec('npx tsc --declaration  --emitDeclarationOnly --outDir tmp')
+      const { stderr } = await asyncExec(`npx tsc --declaration  --emitDeclarationOnly --outDir ${tmp}`)
       if (stderr) {
         console.error(stderr)
       }
@@ -57,6 +67,9 @@ const build = async () => {
       console.error(error)
     }
   })
+
+  // Change the main entry point with the path above (tmp).
+  await changeMainEntryPointFilePath(tmp)
 
   await log.watch('api-extractor', async () => {
     try {
@@ -69,8 +82,11 @@ const build = async () => {
     }
   })
 
+  // Restore the previous value.
+  await changeMainEntryPointFilePath('tmp')
+
   await fs.move('dist/color-xplr.d.ts', 'lib/index.d.ts')
-  await fs.rm('tmp', { recursive: true })
+  await fs.rm(tmp, { recursive: true })
   await fs.rm('dist', { recursive: true })
 }
 
