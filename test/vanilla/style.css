@@ -19,6 +19,14 @@ body {
   background-color: #ddd;
 }
 
+body > * + * {
+  margin-top: 4px;
+}
+
+select {
+  font-family: inherit;
+}
+
 .color-input {
   display: flex;
   flex-direction: row;

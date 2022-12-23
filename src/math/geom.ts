@@ -1,19 +1,39 @@
 
 /**
+ * Horizontal alignment basic declaration.
+ * @public
+ */
+export type HorizontalAlignBase = 'left' | 'right' | 'center'
+const isHorizontalAlignBase = (value: string): value is HorizontalAlignBase => (
+  value === 'left'
+  || value === 'right'
+  || value === 'center'
+)
+/**
  * Horizontal alignment.
  * @public
  */
-export type HorizontalAlign = 'left' | 'right' | 'center' | `${number}` | number
+export type HorizontalAlign = HorizontalAlignBase | `${number}` | number
+/**
+ * Vertical alignment basic declaration.
+ * @public
+ */
+export type VerticalAlignBase = 'top' | 'bottom' | 'middle'
+const isVerticalAlignBase = (value: string): value is VerticalAlignBase => (
+  value === 'top'
+  || value === 'bottom'
+  || value === 'middle'
+)
 /**
  * Vertical alignment.
  * @public
  */
-export type VerticalAlign = 'top' | 'bottom' | 'middle' | `${number}` | number
+export type VerticalAlign = VerticalAlignBase | `${number}` | number
 const resolveAlign = (value: HorizontalAlign | VerticalAlign) => {
   if (typeof value === 'number') {
     return value
   }
-  switch(value) {
+  switch (value) {
     case 'center':
     case 'middle': {
       return .5
@@ -36,18 +56,25 @@ const resolveAlign = (value: HorizontalAlign | VerticalAlign) => {
  * Complex, permissive type for space (2d) alignment declarations.
  * @public
  */
-export type SpaceAlign = 'center' | `${VerticalAlign}-${HorizontalAlign}` | { x: HorizontalAlign, y: VerticalAlign }
+export type SpaceAlign =
+  | 'center'
+  | VerticalAlignBase
+  | HorizontalAlignBase
+  | `${VerticalAlign}-${HorizontalAlign}`
+  | { x: HorizontalAlign, y: VerticalAlign }
 const resolveSpaceAlign = (value: SpaceAlign, out = new Point()) => {
-  if (value === 'center') {
-    out.x = .5
-    out.y = .5
-    return out
-  }
+  out.set(.5, .5)
   if (typeof value === 'string') {
-    // NOTE: string declaration is "axis-reversed" (eg: "top-left")
-    const [y, x] = value.split('-')
-    out.x = resolveAlign(x as HorizontalAlign)
-    out.y = resolveAlign(y as VerticalAlign)
+    if (isHorizontalAlignBase(value)) {
+      out.x = resolveAlign(value)
+    } else if (isVerticalAlignBase(value)) {
+      out.y = resolveAlign(value)
+    } else {
+      // NOTE: string declaration is "axis-reversed" (eg: "top-left")
+      const [y, x] = value.split('-')
+      out.x = resolveAlign(x as HorizontalAlign)
+      out.y = resolveAlign(y as VerticalAlign)
+    }
     return out
   }
   const { x, y } = value
@@ -159,8 +186,8 @@ export class Rect {
       x: alignX,
       y: alignY,
     } = resolveSpaceAlign(align, getTmpPoint())
-    const { 
-      x = this.lerpX(alignX), 
+    const {
+      x = this.lerpX(alignX),
       y = this.lerpY(alignY),
     } = value
     this.x += x - this.lerpX(alignX)

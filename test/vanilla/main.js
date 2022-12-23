@@ -1,5 +1,29 @@
 import { createColorXplr } from '../../lib/index.js'
 
+let align = 'left'
+
+const initSelect = () => {
+  const select = document.querySelector('select')
+  select.innerHTML = [
+    'center',
+    'top',
+    'bottom',
+    'left',
+    'right',
+    'top-left',
+    'top-right',
+    'bottom-left',
+    'bottom-right',
+  ].map(str => `<option value="${str}">${str}</option>`).join('\n')
+  for (const option of select.querySelectorAll('option')) {
+    option.selected = option.value === align
+  }
+  select.onchange = () => {
+    align = select.value
+  }
+}
+initSelect()
+
 const input = document.querySelector('input') 
 input.addEventListener('click', event => {
   event.preventDefault()
@@ -7,22 +31,21 @@ input.addEventListener('click', event => {
     color: input.value,
     modal: {
       source: input,
-      align: 'middle-left',
+      align,
     },
     onChange: app => {
-      const { hex } = app
+      const { hex, color } = app
+      const oppositeHex = color.clone().opposite().toCss()
       input.value = hex
       document.body.style.backgroundColor = hex
-      const oppositeHex = app.color.clone().opposite().toCss()
-      document.body.querySelector('h1').style.color = oppositeHex
+      document.body.style.color = oppositeHex
       document.body.querySelector('label').innerHTML = hex
-      document.body.querySelector('label').style.color = oppositeHex
     },
     onDestroy: app => {
       if (app.colorHasChanged) {
         const { hex, color } = app
-        const negative = color.clone().opposite().toCss()
-        document.body.querySelector('.log').innerHTML += `<div style="color: ${negative}; background-color: ${hex}">color has changed: "${hex}"</div>`
+        const oppositeHex = color.clone().opposite().toCss()
+        document.body.querySelector('.log').innerHTML += `<div style="color: ${oppositeHex}; background-color: ${hex}">color has changed: "${hex}"</div>`
       }
     },
   })
