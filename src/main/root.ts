@@ -37,4 +37,7 @@ export class ColorXplrApp extends Node {
   get colorHasChanged() {
     return this.color.isEquivalent(this.initialColor) === false
   }
+  get hex() {
+    return this.color.toCss()
+  }
 }

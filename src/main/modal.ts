@@ -4,8 +4,12 @@ import { CreateColorXplrArgs } from './create'
 
 export const createModal = (app: Root, modal: NonNullable<CreateColorXplrArgs['modal']>) => {
   const {
-    container = document.body, zIndex = 10,
+    source,
+    container = document.body, 
+    zIndex = 10,
   } = modal
+
+  source.blur()
 
   const div = document.createElement('div')
   div.id = 'color-xplr-modal'
@@ -22,8 +26,10 @@ export const createModal = (app: Root, modal: NonNullable<CreateColorXplrArgs['m
       app.destroy()
     }),
     onKey('Escape', () => {
-      console.log('escape')
       app.updateColor(app.initialColor)
+      app.destroy()
+    }),
+    onKey('Enter', () => {
       app.destroy()
     }),
   )  

@@ -9,15 +9,18 @@ input.addEventListener('click', event => {
       source: input,
     },
     onChange: app => {
-      const hex = app.color.toCss()
+      const { hex } = app
       input.value = hex
       document.body.style.backgroundColor = hex
-      document.body.querySelector('h1').style.color = app.color.clone().negate('hsl').toCss()
+      const oppositeHex = app.color.clone().opposite().toCss()
+      document.body.querySelector('h1').style.color = oppositeHex
+      document.body.querySelector('label').innerHTML = hex
+      document.body.querySelector('label').style.color = oppositeHex
     },
     onDestroy: app => {
       if (app.colorHasChanged) {
-        const hex = app.color.toCss()
-        const negative = app.color.clone().negate('hsl').toCss()
+        const { hex, color } = app
+        const negative = color.clone().opposite().toCss()
         document.body.querySelector('.log').innerHTML += `<div style="color: ${negative}; background-color: ${hex}">color has changed: "${hex}"</div>`
       }
     },
