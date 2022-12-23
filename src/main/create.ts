@@ -1,12 +1,12 @@
-import { css } from './style.css'
-import { html } from './html'
-import { Color } from '../math/color'
-import { createStore } from '../core/store'
-import { initRange } from '../components/range'
 import { initPlane } from '../components/plane'
+import { initRange } from '../components/range'
 import { initString } from '../components/string'
-import { ColorXplrApp, Root } from './root'
+import { createStore } from '../core/store'
+import { Color, SpaceAlign } from '../math'
+import { html } from './html'
 import { createModal } from './modal'
+import { ColorXplrApp, Root } from './root'
+import { css } from './style.css'
 
 /**
  * @public
@@ -18,6 +18,7 @@ export type CreateColorXplrArgs = Partial<{
     source: HTMLElement
     container?: HTMLElement
     zIndex?: number
+    align?: SpaceAlign
   }
   color: string
   onChange: (app: ColorXplrApp) => void
