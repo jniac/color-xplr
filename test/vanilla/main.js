@@ -24,29 +24,38 @@ const initSelect = () => {
 }
 initSelect()
 
-const input = document.querySelector('input') 
-input.addEventListener('click', event => {
-  event.preventDefault()
-  createColorXplr({
-    color: input.value,
-    modal: {
-      source: input,
-      align,
-    },
-    onChange: app => {
-      const { hex, color } = app
-      const oppositeHex = color.clone().opposite().toCss()
-      input.value = hex
-      document.body.style.backgroundColor = hex
-      document.body.style.color = oppositeHex
-      document.body.querySelector('label').innerHTML = hex
-    },
-    onDestroy: app => {
-      if (app.colorHasChanged) {
+const colorInputs = [...document.querySelectorAll('.color-input')].map(div => {
+  const input = div.querySelector('input')
+  const label = div.querySelector('label')
+  return { input, label }
+})
+
+for (const colorInput of colorInputs) {
+  colorInput.input.addEventListener('click', event => {
+    event.preventDefault()
+    createColorXplr({
+      color: colorInput.input.value,
+      modal: {
+        source: colorInput.input,
+        align,
+      },
+      onChange: app => {
         const { hex, color } = app
         const oppositeHex = color.clone().opposite().toCss()
-        document.body.querySelector('.log').innerHTML += `<div style="color: ${oppositeHex}; background-color: ${hex}">color has changed: "${hex}"</div>`
-      }
-    },
+        for (const colorInput of colorInputs) {
+          colorInput.input.value = hex
+          colorInput.label.innerHTML = hex
+        }
+        document.body.style.backgroundColor = hex
+        document.body.style.color = oppositeHex
+      },
+      onDestroy: app => {
+        if (app.colorHasChanged) {
+          const { hex, color } = app
+          const oppositeHex = color.clone().opposite().toCss()
+          document.body.querySelector('.log').innerHTML += `<div style="color: ${oppositeHex}; background-color: ${hex}">color has changed: "${hex}"</div>`
+        }
+      },
+    })
   })
-})
+}

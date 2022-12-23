@@ -6,7 +6,7 @@ body, body * {
   position: relative;
 }
 
-body, div {
+body, div, main {
   display: flex;
   flex-direction: column;
 }
@@ -19,21 +19,46 @@ body {
   background-color: #ddd;
 }
 
-body > * + * {
-  margin-top: 4px;
+main {
+  align-items: center;
+  justify-content: center;
+}
+main > * + * {
+  margin-top: 8px;
 }
 
 select {
   font-family: inherit;
 }
 
-.color-input {
+.abs {
+  position: absolute;
+}
+.abs.top {
+  top: 0;
+}
+.abs.left {
+  left: 0;
+}
+.abs.right {
+  right: 0;
+}
+.abs.bottom {
+  bottom: 0;
+}
+
+.row {
   display: flex;
   flex-direction: row;
   align-items: center;
+  padding: 0 8px;
 }
-.color-input > * + * {
+.row > * + * {
   margin-left: 8px;
+}
+
+.color-input.abs {
+  padding: 8px;
 }
 
 .log {

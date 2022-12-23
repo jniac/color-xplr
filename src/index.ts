@@ -12,8 +12,8 @@ export {
   CreateColorXplrArgs,
   createColorXplr,
   Color,
-  Node,
   ColorXplrApp,
-  Destroyable,
-  NodeCallback,
+  Node as ColorXplrNode,
+  Destroyable as ColorXplrDestroyable,
+  NodeCallback as ColorXplrNodeCallback,
 }
