@@ -53,4 +53,8 @@ ${stringCss}
   bottom: 0;
   right: 0;
 }
+
+#color-xplr-modal > #color-xplr {
+  box-shadow: #0003 8px 8px 16px;
+}
 `

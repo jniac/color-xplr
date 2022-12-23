@@ -7,6 +7,7 @@ input.addEventListener('click', event => {
     color: input.value,
     modal: {
       source: input,
+      align: 'middle-left',
     },
     onChange: app => {
       const { hex } = app
