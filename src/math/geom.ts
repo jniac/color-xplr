@@ -189,10 +189,3 @@ export class Rect {
   get centerY() { return this.getCenterY() }
   get center() { return this.getCenter() }
 }
-
-const r = new Rect().set(10, 10, 20, 40)
-console.log({ ...r })
-console.log(r.getPivot('center'))
-console.log(r.getPivot('middle-right'))
-r.setPivot('middle-right', { x: 35 })
-console.log(r)
