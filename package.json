@@ -1,5 +1,5 @@
 {
-  "name": "color-xplr",
+  "name": "@jniac/color-xplr",
   "version": "1.0.0",
   "description": "It's a color picker for the browser. But a cool one.",
   "main": "lib/index.js",
@@ -10,7 +10,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "Joseph M.",
   "license": "ISC",
   "devDependencies": {
     "@microsoft/api-extractor": "^7.33.7",
@@ -18,5 +18,16 @@
     "esbuild": "0.16.7",
     "fs-extra": "^11.1.0",
     "typescript": "^4.9.4"
-  }
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jniac/color-xplr.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jniac/color-xplr/issues"
+  },
+  "homepage": "https://github.com/jniac/color-xplr#readme"
 }
