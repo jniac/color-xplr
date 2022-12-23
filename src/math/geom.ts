@@ -147,6 +147,35 @@ export class Rect {
   }>) {
     return this.set(x, y, width, height)
   }
+  contains(other: Rect) {
+    return (
+      this.x <= other.x
+      && this.y <= other.y 
+      && this.x + this.width >= other.x + other.width 
+      && this.y + this.height >= other.y + other.height 
+    )
+  }
+  moveInside(outerRect: Rect) {
+    if (outerRect.width < this.width) {
+      this.setCenterX(outerRect.centerX)
+    } else {
+      if (this.x < outerRect.x) {
+        this.x = outerRect.x
+      } else if (this.x + this.width > outerRect.x + outerRect.width) {
+        this.x = outerRect.x + outerRect.width - this.width
+      }
+    }
+    if (outerRect.height < this.height) {
+      this.setCenterY(outerRect.centerY)
+    } else {
+      if (this.y < outerRect.y) {
+        this.y = outerRect.y
+      } else if (this.y + this.height > outerRect.y + outerRect.height) {
+        this.y = outerRect.y + outerRect.height - this.height
+      }
+    }
+    return this
+  }
   inflate(arg: Parameters<Point['apply']>[0]) {
     const { x, y } = getTmpPoint().apply(arg)
     this.x += -x

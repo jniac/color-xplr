@@ -16,6 +16,8 @@ export type CreateColorXplrArgs = Partial<{
   storeKey: string
   modal: {
     source: HTMLElement
+    outerRect?: Window | HTMLElement
+    outerMargin?: number
     container?: HTMLElement
     zIndex?: number
     align?: SpaceAlign
