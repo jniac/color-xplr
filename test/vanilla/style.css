@@ -1,69 +1,77 @@
 @import url(https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&display=swap);
 
-body, body * {
+body {
+  height: 100vh;
+  margin: 0;
+}
+
+.app, .app * {
   box-sizing: border-box;
   margin: 0;
   position: relative;
 }
 
-body, div, main {
+.app, .app div, .app main {
   display: flex;
   flex-direction: column;
 }
 
-body {
-  min-height: 100vh;
+.app {
+  height: 100%;
   align-items: center;
   justify-content: center;
   font-family: 'Fira Code', monospace;
-  background-color: #ddd;
 }
 
-main {
+.app main h1 {
+  font-size: 3em;
+}
+
+.app main {
   align-items: center;
   justify-content: center;
 }
-main > * + * {
+.app main > * + * {
   margin-top: 8px;
 }
 
-select {
+.app select {
   font-family: inherit;
 }
 
-.abs {
+.app .abs {
   position: absolute;
 }
-.abs.top {
+.app .abs.top {
   top: 0;
 }
-.abs.left {
+.app .abs.left {
   left: 0;
 }
-.abs.right {
+.app .abs.right {
   right: 0;
 }
-.abs.bottom {
+.app .abs.bottom {
   bottom: 0;
 }
 
-.row {
+.app .row {
   display: flex;
   flex-direction: row;
   align-items: center;
   padding: 0 8px;
 }
-.row > * + * {
+.app .row > * + * {
   margin-left: 8px;
 }
 
-.color-input.abs {
+.app .color-input.abs {
   padding: 8px;
 }
 
-.log {
+.app .log {
   margin-top: 8px;
 }
-.log > div {
+.app .log > div {
   padding: 2px 4px;
 }

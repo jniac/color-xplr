@@ -41,6 +41,7 @@ export const rangeCss = /* css */`
 }
 
 #color-xplr .range .cursor span {
+  display: flex;
   user-select: none;
   font-size: .66em;
   font-weight: 500;

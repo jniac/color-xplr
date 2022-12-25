@@ -1,6 +1,7 @@
 export const planeCss = /* css */`
 #color-xplr .plane {
   z-index: 1;
+  height: var(--inner-width);
 }
 
 #color-xplr .plane canvas {

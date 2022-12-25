@@ -1,1 +1,6 @@
-#test
+/test
+/src
+dev.mjs
+api-extractor.json
+ts-config.json
+NOTES.md

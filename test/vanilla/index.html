@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="test">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,37 +8,39 @@
 </head>
 
 <body>
-  <main>
-    <h1>Color Xplr</h1>
-    <div class="row color-input">
+  <div class="app">
+    <main>
+      <h1>Color Xplr</h1>
+      <div class="row color-input">
+        <input type="color" name="color" id="" value="#b3c88c">
+        <label for="color">#b3c88c</label>
+      </div>
+      <div class="row align">
+        <label for="">align:</label>
+        <select></select>
+      </div>
+      <div class="log"></div>
+    </main>
+  
+    <div class="color-input row abs top left">
       <input type="color" name="color" id="" value="#b3c88c">
       <label for="color">#b3c88c</label>
     </div>
-    <div class="row align">
-      <label for="">align:</label>
-      <select></select>
+  
+    <div class="color-input row abs top right">
+      <input type="color" name="color" id="" value="#b3c88c">
+      <label for="color">#b3c88c</label>
     </div>
-    <div class="log"></div>
-  </main>
-
-  <div class="color-input row abs top left">
-    <input type="color" name="color" id="" value="#b3c88c">
-    <label for="color">#b3c88c</label>
-  </div>
-
-  <div class="color-input row abs top right">
-    <input type="color" name="color" id="" value="#b3c88c">
-    <label for="color">#b3c88c</label>
-  </div>
-
-  <div class="color-input row abs bottom left">
-    <input type="color" name="color" id="" value="#b3c88c">
-    <label for="color">#b3c88c</label>
-  </div>
-
-  <div class="color-input row abs bottom right">
-    <input type="color" name="color" id="" value="#b3c88c">
-    <label for="color">#b3c88c</label>
+  
+    <div class="color-input row abs bottom left">
+      <input type="color" name="color" id="" value="#b3c88c">
+      <label for="color">#b3c88c</label>
+    </div>
+  
+    <div class="color-input row abs bottom right">
+      <input type="color" name="color" id="" value="#b3c88c">
+      <label for="color">#b3c88c</label>
+    </div>
   </div>
 
   <script type="module" src="main.js"></script>

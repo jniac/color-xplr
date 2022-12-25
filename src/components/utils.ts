@@ -26,6 +26,7 @@ export const handlePointer = (element: HTMLElement, margin: number, callback: (i
       return
     }
     isDown = true
+    event.preventDefault()
     window.addEventListener('pointermove', onMove)
     window.addEventListener('pointerup', onUp)
     callback(computeEventXY(event, element, margin))
@@ -33,7 +34,7 @@ export const handlePointer = (element: HTMLElement, margin: number, callback: (i
   const onMove = (event: PointerEvent) => {
     callback(computeEventXY(event, element, margin))
   }
-  const onUp = (event: PointerEvent) => {
+  const onUp = () => {
     isDown = false
     window.removeEventListener('pointermove', onMove)
     window.removeEventListener('pointermove', onUp)

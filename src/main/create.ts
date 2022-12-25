@@ -86,7 +86,7 @@ export const createColorXplr = ({
     createModal(root, modal)
   }
 
-  const app = new ColorXplrApp(initialColor, color)
+  const app = new ColorXplrApp(div, initialColor, color)
   root.add(app)
   app.onUpdate(() => onChange?.(app))
   app.onDestroy(() => onDestroy?.(app))

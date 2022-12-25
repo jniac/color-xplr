@@ -1,28 +1,9 @@
-import { createColorXplr } from '../../lib/index.js'
+import { Color, createColorXplr } from '../../lib/index.js'
+import { initSelect } from './init-select.js'
 
 let align = 'left'
 
-const initSelect = () => {
-  const select = document.querySelector('select')
-  select.innerHTML = [
-    'center',
-    'top',
-    'bottom',
-    'left',
-    'right',
-    'top-left',
-    'top-right',
-    'bottom-left',
-    'bottom-right',
-  ].map(str => `<option value="${str}">${str}</option>`).join('\n')
-  for (const option of select.querySelectorAll('option')) {
-    option.selected = option.value === align
-  }
-  select.onchange = () => {
-    align = select.value
-  }
-}
-initSelect()
+initSelect(align, value => align = value)
 
 const colorInputs = [...document.querySelectorAll('.color-input')].map(div => {
   const input = div.querySelector('input')
@@ -30,9 +11,21 @@ const colorInputs = [...document.querySelectorAll('.color-input')].map(div => {
   return { input, label }
 })
 
+const updateColor = (hex, oppositeHex) => {
+  for (const colorInput of colorInputs) {
+    colorInput.input.value = hex
+    colorInput.label.innerHTML = hex
+  }
+  document.body.style.backgroundColor = hex
+  document.body.style.color = oppositeHex
+}
+
+updateColor('#b3c8dd', new Color().fromCss('#b3c8dd').opposite().toCss())
+
 for (const colorInput of colorInputs) {
   colorInput.input.addEventListener('click', event => {
     event.preventDefault()
+    colorInput.input.blur()
     createColorXplr({
       color: colorInput.input.value,
       modal: {
@@ -42,12 +35,7 @@ for (const colorInput of colorInputs) {
       onChange: app => {
         const { hex, color } = app
         const oppositeHex = color.clone().opposite().toCss()
-        for (const colorInput of colorInputs) {
-          colorInput.input.value = hex
-          colorInput.label.innerHTML = hex
-        }
-        document.body.style.backgroundColor = hex
-        document.body.style.color = oppositeHex
+        updateColor(hex, oppositeHex)
       },
       onDestroy: app => {
         if (app.colorHasChanged) {

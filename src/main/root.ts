@@ -29,8 +29,10 @@ export class Root extends Node {
 export class ColorXplrApp extends Node {
   initialColor: Color
   color: Color
-  constructor(initialColor: Color, color: Color) {
+  element: HTMLElement
+  constructor(element: HTMLElement, initialColor: Color, color: Color) {
     super()
+    this.element = element
     this.initialColor = initialColor
     this.color = color
   }

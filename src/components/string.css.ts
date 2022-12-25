@@ -1,6 +1,8 @@
 export const stringCss = /* css */`
 #color-xplr .string {
   --color: white;
+  display: flex;
+  flex-direction: column;
   color: var(--color);
   transition: filter .3s ease-out;
 }

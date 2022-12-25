@@ -3,30 +3,33 @@ import { planeCss } from '../components/plane.css'
 import { rangeCss } from '../components/range.css'
 import { stringCss } from '../components/string.css'
 
-export const css: string = /* css */ `
+export const css: string = /* css */`
+@import url(https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&display=swap);
 ${planeModeCss}
 ${planeCss}
 ${rangeCss}
 ${stringCss}
 
-#color-xplr * {
+#color-xplr, #color-xplr * {
   margin: 0;
   position: relative;
   box-sizing: border-box;
 }
 
 #color-xplr {
-  --width: 300px;
+  --width: 240px;
   --padding: 4px;
   --inner-width: calc(var(--width) - 2 * var(--padding));
   width: var(--width);
   padding: var(--padding);
   background-color: #eee;
   border-radius: 4px;
+  font-family: 'Fira Code', monospace;
 }
 
 #color-xplr .colors {
   display: flex;
+  flex-direction: column;
 }
 
 #color-xplr canvas {
@@ -55,6 +58,7 @@ ${stringCss}
 }
 
 #color-xplr-modal > #color-xplr {
+  position: fixed;
   box-shadow: #0003 8px 8px 16px;
 }
 `
