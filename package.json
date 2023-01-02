@@ -6,7 +6,7 @@
   "module": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
-    "start": "node dev.mjs",
+    "start": "node scripts/watch.mjs",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
