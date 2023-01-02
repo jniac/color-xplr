@@ -1,6 +1,8 @@
 import { Color, createColorXplr } from '../../lib/index.js'
 import { initSelect } from './init-select.js'
 
+Object.assign(window, { Color, createColorXplr })
+
 let align = 'left'
 
 initSelect(align, value => align = value)

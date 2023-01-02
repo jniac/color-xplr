@@ -28,8 +28,8 @@ export class Color {
       this.r === other.r
       && this.g === other.g
       && this.b === other.b
-      && this.a === other.a  
-    )    
+      && this.a === other.a
+    )
   }
 
   copy(other: Color) {
@@ -101,14 +101,48 @@ export class Color {
   }
 
   fromCss(str: string) {
+    str = str.trim().toLowerCase()
     if (/^#?[0-9a-f]{6}$/i.test(str)) {
       return this.fromHex(Number.parseInt(str.slice(-6), 16))
+    }
+    if (str.startsWith('rgb(') && str.endsWith(')')) {
+      str = str.slice(4, -1)
+      const map = (x: string, index: number) => {
+        let n = Number.parseFloat(x)
+        if (x.endsWith('%')) {
+          n /= 100
+        } else {
+          if (index < 3) {
+            n /= 0xff
+          }
+        }
+        return n
+      }
+      /* handling:
+        rgb(31, 120, 50)
+        rgb(30%, 20%, 50%)
+        rgb(255, 122, 127, 80%)
+        rgb(255, 122, 127, .8)
+      */
+      if (/\d+%?\s*,\s*\d+%?\s*,\s*\d+%?.*/.test(str)) {
+        const [r, g, b, a = 1] = str.split(/\s*,\s*/).map(map)
+        return this.setRGB(r, g, b, a)
+      }
+      /* handling:
+        rgb(255 122 127 / 20%)
+        rgb(255 122 127 / .2)
+      */
+      if (/\d+%? \d+%? \d+%?.*/.test(str)) {
+        const [r, g, b, a = 1] = str.split(/[\s/]+/).map(map)
+        return this.setRGB(r, g, b, a)
+      }
+      throw new Error(`Unsupported RGB string format: "${str}"`)
     }
     throw new Error(`Unsupported string format: "${str}"`)
   }
 
   set(arg: string | number | { r: number; g: number; b: number; a?: number } | { h: number; s: number; l: number; a?: number }) {
-    switch(typeof arg) {
+    switch (typeof arg) {
       case 'string': {
         return this.fromCss(arg)
       }
@@ -128,7 +162,7 @@ export class Color {
   }
 
   lerpColors(color1: Color, color2: Color, alpha: number, mode: 'rgb' | 'hsl' | 'hsv' = 'rgb') {
-    switch(mode) {
+    switch (mode) {
       case 'rgb': {
         const r = lerpUnclamped(color1.r, color2.r, alpha)
         const g = lerpUnclamped(color1.g, color2.g, alpha)
@@ -171,7 +205,7 @@ export class Color {
   }
 
   negate(mode: 'rgb' | 'hsl' | 'hsv' = 'rgb') {
-    switch(mode) {
+    switch (mode) {
       case 'rgb': {
         return this.setRGB(1 - this.r, 1 - this.g, 1 - this.b)
       }
