@@ -1,6 +1,9 @@
 /test
 /src
-dev.mjs
+/extras
+/node_modules
+/scripts
 api-extractor.json
 ts-config.json
+pnpm-lock.yaml
 NOTES.md
