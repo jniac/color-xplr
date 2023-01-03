@@ -1,5 +1,5 @@
 # Color Xplr
-It's a color explorer (in the browser) for frustrated creatives. 
+It's a funky-damn-cool color explorer (in the browser) for frustrated creatives. 
 
 It's not a picker, it's an explorer.
 

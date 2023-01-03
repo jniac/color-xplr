@@ -1,16 +1,26 @@
 {
   "name": "@jniac/color-xplr",
-  "version": "1.0.1",
-  "description": "It's a color explorer (in the browser) for frustrated creatives. It's not a picker, it's an explorer.",
+  "version": "1.0.3",
+  "description": "It's a funky-damn-cool color explorer (in the browser) for frustrated creatives. It's not a picker, it's an explorer.",
   "main": "lib/index.js",
   "module": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
     "start": "node scripts/watch.mjs",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Run a live server and go to http://localhost:XXXX/test/vanilla\""
   },
-  "keywords": [],
-  "author": "Joseph M.",
+  "keywords": [
+    "react",
+    "creative",
+    "color explorer",
+    "color picker",
+    "colorpicker",
+    "picker",
+    "sketch",
+    "chrome",
+    "popup"
+  ],
+  "author": "Joseph M. <joseph.merdrignac@gmail.com>",
   "license": "ISC",
   "devDependencies": {
     "@microsoft/api-extractor": "^7.33.7",
