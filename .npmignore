@@ -4,6 +4,6 @@
 /node_modules
 /scripts
 api-extractor.json
-ts-config.json
+tsconfig.json
 pnpm-lock.yaml
 NOTES.md
