@@ -1,8 +1,23 @@
 @import url(https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&display=swap);
+@import url(layout.css);
 
 body {
   height: 100vh;
   margin: 0;
+  font-family: 'Fira Code', monospace;
+}
+
+.Loading {
+  background-color: #fff6;
+  font-size: 3em;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition: opacity .5s ease-in-out;
+}
+
+.Loading.hidden {
+  pointer-events: none;
+  opacity: 0;
 }
 
 .app, .app * {
@@ -20,7 +35,6 @@ body {
   height: 100%;
   align-items: center;
   justify-content: center;
-  font-family: 'Fira Code', monospace;
 }
 
 .app main h1 {

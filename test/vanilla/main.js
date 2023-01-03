@@ -49,3 +49,7 @@ for (const colorInput of colorInputs) {
     })
   })
 }
+
+setTimeout(() => {
+  document.querySelector('.Loading').classList.add('hidden')
+}, 400)
