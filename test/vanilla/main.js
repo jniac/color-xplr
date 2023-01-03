@@ -1,4 +1,4 @@
-import { Color, createColorXplr } from '../../lib/index.js'
+import { Color, createColorXplr } from '@jniac/color-xplr'
 import { initSelect } from './init-select.js'
 
 Object.assign(window, { Color, createColorXplr })
