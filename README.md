@@ -13,4 +13,8 @@ It's not a picker, it's an explorer.
 - 4 "plane" modes: hue, red, green, blue (for inspiration)
 - "copy to clipboard" button
 - hue, luminosity, saturation, red, green & blue sliders (for fine control over tint).
-- modal handling: "align" mode & "stay inside window" position
+- modal position: "align" mode & "stay-inside-window" feature
+
+## About
+
+Pure modern ES / dom library, no dependency.
