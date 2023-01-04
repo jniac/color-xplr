@@ -9,7 +9,7 @@ let mode = ColorXplrMode.blue
 initAlignSelect(align, value => align = value)
 initModeSelect(mode, value => mode = value)
 
-const colorInputs = [...document.querySelectorAll('.color-input')].map(div => {
+const colorInputs = [...document.querySelectorAll('.ColorInput')].map(div => {
   const input = div.querySelector('input')
   const label = div.querySelector('label')
   return { input, label }

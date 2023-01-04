@@ -1,5 +1,4 @@
 @import url(https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&display=swap);
-@import url(layout.css);
 
 body {
   height: 100vh;
@@ -26,27 +25,12 @@ body {
   position: relative;
 }
 
-.app, .app div, .app main {
-  display: flex;
-  flex-direction: column;
-}
-
 .app {
   height: 100%;
-  align-items: center;
-  justify-content: center;
 }
 
 .app main h1 {
   font-size: 3em;
-}
-
-.app main {
-  align-items: center;
-  justify-content: center;
-}
-.app main > * + * {
-  margin-top: 8px;
 }
 
 .app select {
@@ -69,23 +53,14 @@ body {
   bottom: 0;
 }
 
-.app .row {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: 0 8px;
-}
-.app .row > * + * {
-  margin-left: 8px;
-}
-
-.app .color-input.abs {
+.app .ColorInput.abs {
   padding: 8px;
 }
 
 .app .log {
   margin-top: 8px;
 }
+
 .app .log > div {
   padding: 2px 4px;
 }
