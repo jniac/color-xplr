@@ -1,7 +1,8 @@
+import { ColorXplrMode } from '../../lib/index.js'
 
-export const initSelect = (initialAign, onChange) => {
-  let align = initialAign
-  const select = document.querySelector('select')
+export const initAlignSelect = (initialAlign, onChange) => {
+  let align = initialAlign
+  const select = document.querySelector('.ModalAlign select')
   select.innerHTML = [
     'center',
     'top',
@@ -15,6 +16,18 @@ export const initSelect = (initialAign, onChange) => {
   ].map(str => `<option value="${str}">${str}</option>`).join('\n')
   for (const option of select.querySelectorAll('option')) {
     option.selected = option.value === align
+  }
+  select.onchange = () => {
+    onChange(select.value)
+  }
+}
+
+export const initModeSelect = (initialMode, onChange) => {
+  let mode = initialMode
+  const select = document.querySelector('.ColorMode select')
+  select.innerHTML = Object.values(Object.values(ColorXplrMode)).map(str => `<option value="${str}">${str}</option>`).join('\n')
+  for (const option of select.querySelectorAll('option')) {
+    option.selected = option.value === mode
   }
   select.onchange = () => {
     onChange(select.value)

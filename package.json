@@ -6,7 +6,8 @@
   "module": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
-    "start": "node scripts/watch.mjs",
+    "dev": "node scripts/watch.mjs",
+    "build": "node scripts/build.mjs",
     "test": "echo \"Run a live server and go to http://localhost:XXXX/test/vanilla\""
   },
   "keywords": [

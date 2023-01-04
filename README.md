@@ -18,3 +18,8 @@ It's not a picker, it's an explorer.
 ## About
 
 Pure modern ES / dom library, no dependency.
+
+## Dev
+```
+yarn dev
+```

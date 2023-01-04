@@ -3,6 +3,7 @@ export const stringCss = /* css */`
   --color: white;
   display: flex;
   flex-direction: column;
+  border-radius: 4px;
   color: var(--color);
   transition: filter .3s ease-out;
 }
@@ -13,16 +14,22 @@ export const stringCss = /* css */`
 }
 
 #color-xplr .string input {
+  font-family: inherit;
+  text-align: center;
+  border: none;
+  background-color: transparent;
+  padding: 32px 0;
   color: var(--color);
 }
 
 #color-xplr .string .copy {
-  --size: 16px;
+  --size: 12px;
+  position: absolute;
   top: calc(50% - var(--size) / 2);
   right: 16px;
   width: var(--size);
   height: var(--size);
-  position: absolute;
+  display: flex;
   cursor: pointer;
 }
 

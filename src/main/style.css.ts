@@ -1,14 +1,21 @@
 import { planeModeCss } from '../components/plane-modes.css'
 import { planeCss } from '../components/plane.css'
-import { rangeCss } from '../components/range.css'
+import { sliderCss } from '../components/slider.css'
 import { stringCss } from '../components/string.css'
 
 export const css: string = /* css */`
 @import url(https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&display=swap);
 ${planeModeCss}
 ${planeCss}
-${rangeCss}
+${sliderCss}
 ${stringCss}
+
+#color-xplr {
+  --width: 240px;
+  --padding: 4px;
+  --slider-height: 18px;
+  --inner-width: calc(var(--width) - 2 * var(--padding));
+}
 
 #color-xplr, #color-xplr * {
   margin: 0;
@@ -17,13 +24,10 @@ ${stringCss}
 }
 
 #color-xplr {
-  --width: 240px;
-  --padding: 4px;
-  --inner-width: calc(var(--width) - 2 * var(--padding));
   width: var(--width);
   padding: var(--padding);
   background-color: #eee;
-  border-radius: 4px;
+  border-radius: var(--padding);
   font-family: 'Fira Code', monospace;
 }
 
@@ -32,21 +36,12 @@ ${stringCss}
   flex-direction: column;
 }
 
+#color-xplr .colors > * + * {
+  margin-top: var(--padding);
+}
+
 #color-xplr canvas {
   width: var(--inner-width);
-}
-
-#color-xplr .string {
-  margin-top: var(--padding);
-  border-radius: 4px;
-}
-
-#color-xplr .string input {
-  font-family: inherit;
-  text-align: center;
-  border: none;
-  background-color: transparent;
-  padding: 32px 0;
 }
 
 #color-xplr-modal {

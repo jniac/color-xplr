@@ -1,5 +1,5 @@
 import { Color } from '../math/color'
-import { Store } from './type'
+import { Store } from '../core/store'
 import { Node } from '../core/node'
 
 /**

@@ -1,11 +1,13 @@
-import { Color, createColorXplr } from '@jniac/color-xplr'
-import { initSelect } from './init-select.js'
+import { Color, ColorXplrMode, createColorXplr } from '../../lib/index.js'
+import { initAlignSelect, initModeSelect } from './init-select.js'
 
 Object.assign(window, { Color, createColorXplr })
 
 let align = 'left'
+let mode = ColorXplrMode.blue
 
-initSelect(align, value => align = value)
+initAlignSelect(align, value => align = value)
+initModeSelect(mode, value => mode = value)
 
 const colorInputs = [...document.querySelectorAll('.color-input')].map(div => {
   const input = div.querySelector('input')
@@ -28,11 +30,16 @@ for (const colorInput of colorInputs) {
   colorInput.input.addEventListener('click', event => {
     event.preventDefault()
     colorInput.input.blur()
+    const sliderHeight = colorInput.input.dataset.sliderHeight
     createColorXplr({
       color: colorInput.input.value,
+      mode,
       modal: {
         source: colorInput.input,
         align,
+      },
+      settings: {
+        sliderHeight,
       },
       onChange: app => {
         const { hex, color } = app

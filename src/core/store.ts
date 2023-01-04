@@ -1,4 +1,8 @@
-import { Store } from '../main/type'
+
+export type Store = {
+  get: (key: string) => any
+  set: (key: string, value: any) => void
+}
 
 const keyPrefix = 'color-xplr'
 

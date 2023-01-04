@@ -1,7 +1,7 @@
 import { onDirectTap, onKey } from './utils'
 import { Root } from './root'
-import { CreateColorXplrArgs } from './create'
 import { Point, Rect } from '../math'
+import { ModalArg } from './types'
 
 const getOuterRect = (arg: Window | HTMLElement, margin: number) => {
   if (arg instanceof Window) {
@@ -12,7 +12,7 @@ const getOuterRect = (arg: Window | HTMLElement, margin: number) => {
   }
 }
 
-export const createModal = (app: Root, modal: NonNullable<CreateColorXplrArgs['modal']>) => {
+export const createModal = (app: Root, modal: ModalArg) => {
   const {
     source,
     container = document.body,

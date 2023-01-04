@@ -1,6 +1,6 @@
 import { Root } from '../main/root'
 import { Color, lerpUnclamped, Point } from '../math'
-import { InterpolationXY, PlaneMode } from '../main/type'
+import { PlaneInterpolation, PlaneMode } from '../main/types'
 import { initPlaneModes } from './plane-modes'
 import { handlePointer } from './utils'
 
@@ -10,7 +10,7 @@ const _color32 = _color.toColor32()
 const getCompInterpolation = (color: Color) => {
   const colorPrev = color.clone().hueShift(-1 / 8)
   const colorNext = color.clone().hueShift(1 / 8)
-  const interpolate: InterpolationXY = (x, y) => {
+  const interpolate: PlaneInterpolation = (x, y) => {
     if (x < .5) {
       const t = x / .5
       _color.lerpColors(colorPrev, color, t ** .5, 'hsl')
@@ -31,10 +31,10 @@ const getCompInterpolation = (color: Color) => {
   return interpolate
 }
 
-export const initPlane = (root: Root, div: HTMLDivElement) => {
+export const initPlane = (root: Root, div: HTMLDivElement, mode: PlaneMode) => {
   const { color, store, updateColor } = root
 
-  let mode: PlaneMode = store.get('plane-mode') ?? 'hue'
+  mode ??= store.get('plane-mode') ?? PlaneMode.hue 
 
   const canvas = div.querySelector('canvas') as HTMLCanvasElement
   const cursor = div.querySelector('.cursor') as HTMLDivElement
@@ -108,7 +108,7 @@ export const initPlane = (root: Root, div: HTMLDivElement) => {
   }
 
   const update = () => {
-    let interpolateXY: InterpolationXY = (x, y) => _color.setRGB(1, 1, 1)
+    let interpolateXY: PlaneInterpolation = (x, y) => _color.setRGB(1, 1, 1)
     switch (mode) {
       case 'hue': {
         interpolateXY = (x, y) => {

@@ -1,5 +1,5 @@
 import { Point } from '../math'
-import { InterpolationXY, PlaneMode } from '../main/type'
+import { PlaneInterpolation, PlaneMode } from '../main/types'
 
 const planeModes = Object
   .values(PlaneMode)
@@ -16,7 +16,7 @@ export const initPlaneModes = (div: HTMLDivElement, currentMode: PlaneMode) => {
     modes.appendChild(div)
   }
 
-  const update = (currentMode: PlaneMode, cursorCoords: Point, interpolateXY: InterpolationXY) => {
+  const update = (currentMode: PlaneMode, cursorCoords: Point, interpolateXY: PlaneInterpolation) => {
     const children = modes.children as any as HTMLDivElement[]
     for (const div of children) {
       const selected = div.dataset.mode === currentMode

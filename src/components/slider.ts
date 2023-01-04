@@ -3,13 +3,13 @@ import { clamp01 } from '../math/utils'
 import { Root } from '../main/root'
 import { handlePointer } from './utils'
 
-const rangeModes = ['hue', 'red', 'green', 'blue', 'luminosity', 'saturation'] as const
-type RangeMode = (typeof rangeModes)[number]
+const sliderModes = ['hue', 'red', 'green', 'blue', 'luminosity', 'saturation'] as const
+type SliderMode = (typeof sliderModes)[number]
 
 const _color = new Color()
 const _color32 = _color.toColor32()
 
-export const initRange = (root: Root, div: HTMLDivElement, mode: RangeMode) => {
+export const initSlider = (root: Root, div: HTMLDivElement, mode: SliderMode) => {
   div.classList.add(mode)
   const canvas = div.querySelector('canvas') as HTMLCanvasElement
   const cursor = div.querySelector('.cursor') as HTMLDivElement
@@ -22,7 +22,7 @@ export const initRange = (root: Root, div: HTMLDivElement, mode: RangeMode) => {
   const imageData = new ImageData(256, 1)
   const { data } = imageData
 
-  const margin = 8
+  const margin = 10
 
   const { color, updateColor } = root
   const newColor = new Color()

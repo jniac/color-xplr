@@ -8,37 +8,37 @@ export const html: string = /* html */ `
     <div class="cursor"></div>
   </div>
 
+  <div class="sliders">
+    <div class="slider">
+      <canvas width="256" height="1"></canvas>
+      <div class="cursor"></div>
+    </div>
+    <div class="slider">
+      <canvas width="256" height="1"></canvas>
+      <div class="cursor"></div>
+    </div>
+    <div class="slider">
+      <canvas width="256" height="1"></canvas>
+      <div class="cursor"></div>
+    </div>
+    <div class="slider">
+      <canvas width="256" height="1"></canvas>
+      <div class="cursor"></div>
+    </div>
+    <div class="slider">
+      <canvas width="256" height="1"></canvas>
+      <div class="cursor"></div>
+    </div>
+    <div class="slider">
+      <canvas width="256" height="1"></canvas>
+      <div class="cursor"></div>
+    </div>
+  </div>
+
   <div class="string">
     <input />
     <div class="copy">
       ${copySvg}
-    </div>
-  </div>
-
-  <div class="ranges">
-    <div class="range">
-      <canvas width="256" height="1"></canvas>
-      <div class="cursor"></div>
-    </div>
-    <div class="range">
-      <canvas width="256" height="1"></canvas>
-      <div class="cursor"></div>
-    </div>
-    <div class="range">
-      <canvas width="256" height="1"></canvas>
-      <div class="cursor"></div>
-    </div>
-    <div class="range">
-      <canvas width="256" height="1"></canvas>
-      <div class="cursor"></div>
-    </div>
-    <div class="range">
-      <canvas width="256" height="1"></canvas>
-      <div class="cursor"></div>
-    </div>
-    <div class="range">
-      <canvas width="256" height="1"></canvas>
-      <div class="cursor"></div>
     </div>
   </div>
 </div>

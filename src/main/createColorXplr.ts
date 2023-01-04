@@ -1,31 +1,29 @@
 import { initPlane } from '../components/plane'
-import { initRange } from '../components/range'
+import { initSlider } from '../components/slider'
 import { initString } from '../components/string'
 import { createStore } from '../core/store'
-import { Color, SpaceAlign } from '../math'
+import { Color } from '../math'
 import { html } from './html'
 import { createModal } from './modal'
 import { ColorXplrApp, Root } from './root'
 import { css } from './style.css'
+import { CreateColorXplrArgs, StyleSettigns, PlaneMode } from './types'
 
-/**
- * @public
- */
-export type CreateColorXplrArgs = Partial<{
-  /** The key used for local storage of preferences. */
-  storeKey: string
-  modal: {
-    source: HTMLElement
-    outerRect?: Window | HTMLElement
-    outerMargin?: number
-    container?: HTMLElement
-    zIndex?: number
-    align?: SpaceAlign
+const processStyleSettings = (element: HTMLElement, settings: StyleSettigns) => {
+  const ensureString = (value: number | string, unit: string) => {
+    value = value.toString()
+    if (value.endsWith(unit) === false) {
+      value = `${value}px`
+    }
+    return value
   }
-  color: string
-  onChange: (app: ColorXplrApp) => void
-  onDestroy: (app: ColorXplrApp) => void
-}>
+  const {
+    sliderHeight,
+  } = settings ?? {}
+  if (sliderHeight) {
+    element.style.setProperty('--slider-height', ensureString(sliderHeight, 'px'))
+  }
+}
 
 /**
  * Create a Color Xplr dom element.
@@ -34,15 +32,21 @@ export type CreateColorXplrArgs = Partial<{
 export const createColorXplr = ({
   storeKey = 'color-xplr', 
   color: initialColorStr, 
-  modal, 
+  modal,
+  mode = PlaneMode.hue,
   onChange,
   onDestroy,
+  settings,
 }: CreateColorXplrArgs = {}): ColorXplrApp => {
   const store = createStore(storeKey)
 
   const div = document.createElement('div')
   div.innerHTML = html
   div.id = 'color-xplr'
+
+  if (settings) {
+    processStyleSettings(div, settings)
+  }  
 
   const style = document.createElement('style')
   style.innerHTML = css
@@ -64,14 +68,14 @@ export const createColorXplr = ({
   })
 
   const planeDiv = div.querySelector('.plane') as HTMLDivElement
-  initPlane(root, planeDiv)
-  const divs = [...div.querySelectorAll('.ranges > div')] as HTMLDivElement[]
-  initRange(root, divs.shift()!, 'hue')
-  initRange(root, divs.shift()!, 'luminosity')
-  initRange(root, divs.shift()!, 'saturation')
-  initRange(root, divs.shift()!, 'red')
-  initRange(root, divs.shift()!, 'green')
-  initRange(root, divs.shift()!, 'blue')
+  initPlane(root, planeDiv, mode)
+  const divs = [...div.querySelectorAll('.sliders > .slider')] as HTMLDivElement[]
+  initSlider(root, divs.shift()!, 'hue')
+  initSlider(root, divs.shift()!, 'luminosity')
+  initSlider(root, divs.shift()!, 'saturation')
+  initSlider(root, divs.shift()!, 'red')
+  initSlider(root, divs.shift()!, 'green')
+  initSlider(root, divs.shift()!, 'blue')
   const stringDiv = div.querySelector('.string') as HTMLDivElement
   initString(root, stringDiv, 'hex')
 
