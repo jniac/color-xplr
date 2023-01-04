@@ -1,4 +1,4 @@
-import { ColorXplrMode } from '../../lib/index.js'
+import { ColorXplrMode } from '@jniac/color-xplr'
 
 export const initAlignSelect = (initialAlign, onChange) => {
   let align = initialAlign

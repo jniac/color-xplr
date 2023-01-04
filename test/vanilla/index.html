@@ -5,23 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Color Xplr</title>
   <link rel="stylesheet" href="style.css">
-  <script>
-    // On local host use local file, online use online file (npm / unpkg).
-    const importElement = document.createElement('script')
-    importElement.type = 'importmap'
-    const { host } = window.location
-    const url = host.startsWith('127.0.0.1') || host.startsWith('localhost') 
-      ? '../../lib/index.js' 
-      : "https://unpkg.com/@jniac/color-xplr"
-    importElement.innerHTML =  `
-      {
-        "imports": {
-          "@jniac/color-xplr": "${url}"
-        }
+  <script type="importmap">
+    {
+      "imports": {
+        "@jniac/color-xplr": "https://unpkg.com/@jniac/color-xplr"
       }
-    `
-    document.head.append(importElement)
+    }
   </script>
+  <!-- <script type="importmap">
+    {
+      "imports": {
+        "@jniac/color-xplr": "../../lib/index.js"
+      }
+    }
+  </script> -->
   <script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
 </head>
 
