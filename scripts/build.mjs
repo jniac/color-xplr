@@ -1,19 +1,22 @@
 #!/usr/bin/env node
 
-import * as esbuild from 'esbuild'
+import os from 'os'
 import fs from 'fs-extra'
-import { task, asyncExec, changeMainEntryPointFilePath } from './utils.mjs'
+import path from 'path'
+import * as esbuild from 'esbuild'
+import { task, asyncExec, changeMainEntryPointFilePath, restoreMainEntryPointFilePath } from './utils.mjs'
 
 export const build = async () => {
   // Compute tmp dir
+  const tmp = os.tmpdir()
   const now = Date.now()
-  const tmp = `tmp-${now}`
-  const lib = `lib-${now}`
+  const tmpTscDir = path.join(tmp, `tmp-${now}`)
+  const tmpLibDir = path.join(tmp, `lib-${now}`)
 
   await task.run('esbuild', async () => {
     await esbuild.build({
       entryPoints: ['src/index.ts'],
-      outdir: lib,
+      outdir: tmpLibDir,
       bundle: true,
       sourcemap: true,
       minify: true,
@@ -25,7 +28,7 @@ export const build = async () => {
 
   await task.run('tsc', async () => {
     try {
-      const { stderr } = await asyncExec(`npx tsc --declaration  --emitDeclarationOnly --outDir ${tmp}`)
+      const { stderr } = await asyncExec(`npx tsc --declaration  --emitDeclarationOnly --outDir ${tmpTscDir}`)
       if (stderr) {
         console.error(stderr)
       }
@@ -35,7 +38,7 @@ export const build = async () => {
   })
 
   // Change the main entry point with the path above (tmp).
-  await changeMainEntryPointFilePath(tmp)
+  await changeMainEntryPointFilePath(tmpTscDir)
 
   await task.run('api-extractor', async () => {
     try {
@@ -49,16 +52,16 @@ export const build = async () => {
   })
 
   // Restore the previous value.
-  await changeMainEntryPointFilePath('tmp')
+  await restoreMainEntryPointFilePath()
 
   // Replace lib
   if (await fs.pathExists('lib')) {
     await fs.rm('lib', { recursive: true })
   }
-  await fs.move(lib, 'lib')
+  await fs.move(tmpLibDir, 'lib')
 
   await fs.move('dist/color-xplr.d.ts', 'lib/index.d.ts')
-  await fs.rm(tmp, { recursive: true })
+  await fs.rm(tmpTscDir, { recursive: true })
   await fs.rm('dist', { recursive: true })
 }
 

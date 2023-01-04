@@ -24,8 +24,16 @@ export const task = {
 
 export const changeMainEntryPointFilePath = async (tmp) => {
   let apiExtractorJson = await fs.readFile('api-extractor.json', 'utf-8')
-  const mainEntryPointFilePath = `"mainEntryPointFilePath": "<projectFolder>/${tmp}/index.d.ts"`
-  const re = /"mainEntryPointFilePath": "<projectFolder>\/[\w\-]+\/index.d.ts"/
+  const mainEntryPointFilePath = `"mainEntryPointFilePath": "${tmp}/index.d.ts"`
+  const re = /"mainEntryPointFilePath": ".*index.d.ts"/
   apiExtractorJson = apiExtractorJson.replace(re, mainEntryPointFilePath)
+  await fs.writeFile('api-extractor.json', apiExtractorJson, 'utf-8')
+}
+
+export const restoreMainEntryPointFilePath = async () => {
+  let apiExtractorJson = await fs.readFile('api-extractor.json', 'utf-8')
+  const defaultMainEntryPointFilePath = `"mainEntryPointFilePath": "<projectFolder>/tmp/index.d.ts"`
+  const re = /"mainEntryPointFilePath": ".*index.d.ts"/
+  apiExtractorJson = apiExtractorJson.replace(re, defaultMainEntryPointFilePath)
   await fs.writeFile('api-extractor.json', apiExtractorJson, 'utf-8')
 }
