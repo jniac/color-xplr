@@ -1,5 +1,4 @@
-// import { Color, ColorXplrMode, createColorXplr } from '@jniac/color-xplr'
-import { createColorXplr } from '../../../lib/index.js'
+import { createColorXplr } from '@jniac/color-xplr'
 
 /** @type {HTMLElement} */
 const section = document.querySelector('.Section2')
