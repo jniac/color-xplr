@@ -36,6 +36,12 @@ export class ColorXplrApp extends Node {
     this.initialColor = initialColor
     this.color = color
   }
+  onChange(callback: (app: ColorXplrApp) => void) {
+    this.onUpdate(() => callback(this))
+  }
+  onFinish(callback: (app: ColorXplrApp) => void) {
+    this.onDestroy(() => callback(this))
+  }
   get colorHasChanged() {
     return this.color.isEquivalent(this.initialColor) === false
   }

@@ -14,6 +14,7 @@ ${stringCss}
   --width: 240px;
   --padding: 4px;
   --slider-height: 18px;
+  --background-color: #eee;
   --inner-width: calc(var(--width) - 2 * var(--padding));
 }
 
@@ -26,7 +27,7 @@ ${stringCss}
 #color-xplr {
   width: var(--width);
   padding: var(--padding);
-  background-color: #eee;
+  background-color: var(--background-color);
   border-radius: var(--padding);
   font-family: 'Fira Code', monospace;
 }

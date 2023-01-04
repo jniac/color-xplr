@@ -21,7 +21,12 @@ export type PlaneInterpolation = (x: number, y: number) => Color
  * Style settings of the Color Explorer.
  */
 export type StyleSettigns = Partial<{
+  /** The width of the Color Explorer element, default is 240 (px). */
+  width: number | string
+  /** The height of... the sliders! */
   sliderHeight: number | string
+  /** Ok, it's what you guessed. */
+  backgroundColor: string
 }>
 
 /**
@@ -47,7 +52,5 @@ export type CreateColorXplrArgs = Partial<{
   mode: PlaneMode
   color: string
   onChange: (app: ColorXplrApp) => void
-  onDestroy: (app: ColorXplrApp) => void
-  /** Style settings */
-  settings: StyleSettigns
-}>
+  onFinish: (app: ColorXplrApp) => void
+}> & StyleSettigns

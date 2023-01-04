@@ -10,18 +10,27 @@ import { css } from './style.css'
 import { CreateColorXplrArgs, StyleSettigns, PlaneMode } from './types'
 
 const processStyleSettings = (element: HTMLElement, settings: StyleSettigns) => {
-  const ensureString = (value: number | string, unit: string) => {
+  const ensureString = (value: number | string, unit?: string) => {
     value = value.toString()
-    if (value.endsWith(unit) === false) {
-      value = `${value}px`
+    if (unit && value.endsWith(unit) === false) {
+      value = `${value}${unit}`
     }
     return value
   }
+
   const {
+    width,
     sliderHeight,
+    backgroundColor,
   } = settings ?? {}
+  if (width) {
+    element.style.setProperty('--width', ensureString(width, 'px'))
+  }
   if (sliderHeight) {
     element.style.setProperty('--slider-height', ensureString(sliderHeight, 'px'))
+  }
+  if (backgroundColor) {
+    element.style.setProperty('--background-color', ensureString(backgroundColor))
   }
 }
 
@@ -35,8 +44,8 @@ export const createColorXplr = ({
   modal,
   mode = PlaneMode.hue,
   onChange,
-  onDestroy,
-  settings,
+  onFinish,
+  ...props
 }: CreateColorXplrArgs = {}): ColorXplrApp => {
   const store = createStore(storeKey)
 
@@ -44,9 +53,7 @@ export const createColorXplr = ({
   div.innerHTML = html
   div.id = 'color-xplr'
 
-  if (settings) {
-    processStyleSettings(div, settings)
-  }  
+  processStyleSettings(div, props)
 
   const style = document.createElement('style')
   style.innerHTML = css
@@ -93,7 +100,7 @@ export const createColorXplr = ({
   const app = new ColorXplrApp(div, initialColor, color)
   root.add(app)
   app.onUpdate(() => onChange?.(app))
-  app.onDestroy(() => onDestroy?.(app))
+  app.onFinish(() => onFinish?.(app))
 
   return app
 }

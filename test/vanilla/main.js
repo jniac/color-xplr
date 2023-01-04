@@ -30,7 +30,6 @@ for (const colorInput of colorInputs) {
   colorInput.input.addEventListener('click', event => {
     event.preventDefault()
     colorInput.input.blur()
-    const sliderHeight = colorInput.input.dataset.sliderHeight
     createColorXplr({
       color: colorInput.input.value,
       mode,
@@ -38,15 +37,13 @@ for (const colorInput of colorInputs) {
         source: colorInput.input,
         align,
       },
-      settings: {
-        sliderHeight,
-      },
+      ...colorInput.input.dataset,
       onChange: app => {
         const { hex, color } = app
         const oppositeHex = color.clone().opposite().toCss()
         updateColor(hex, oppositeHex)
       },
-      onDestroy: app => {
+      onFinish: app => {
         if (app.colorHasChanged) {
           const { hex, color } = app
           const oppositeHex = color.clone().opposite().toCss()
