@@ -1,6 +1,7 @@
 export const clamp01 = (x: number) => x < 0 ? 0 : x > 1 ? 1 : x
 export const positiveModulo = (x: number, m: number) => (x %= m) > 0 ? x : x + m
-export const to0xff = (x: number) => Math.min(Math.floor(x * 0x100), 0xff)
+export const to0xff = (x: number) => Math.max(0, Math.min(Math.floor(x * 0x100), 0xff))
+export const toFF = (x: number) => to0xff(x).toString(16).padStart(2, '0')
 export const lerpUnclamped = (a: number, b: number, alpha: number) => a + (b - a) * alpha
 /**
  * "Short" linear interpolation using modulo. Kind of weird. Authorize interpolation 

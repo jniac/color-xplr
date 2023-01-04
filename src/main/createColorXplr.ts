@@ -52,7 +52,7 @@ export const createColorXplr = ({
   style.innerHTML = css
   document.head.append(style)
 
-  const initialColor = new Color().set(initialColorStr ?? store.get('color') ?? '#e9e59a')
+  const initialColor = new Color().from(initialColorStr ?? store.get('color') ?? '#e9e59a')
   const color = initialColor.clone()
 
   const updateColor = (newColor: Color) => {

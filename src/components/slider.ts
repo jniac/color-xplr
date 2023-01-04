@@ -31,11 +31,11 @@ export const initSlider = (root: Root, div: HTMLDivElement, mode: SliderMode) =>
       case 'hue':
         return updateColor(newColor.setHSL(x, color.hsl.s, color.hsl.l))
       case 'red':
-        return updateColor(newColor.setRGB(x, color.g, color.b))
+        return updateColor(newColor.set(x, color.g, color.b))
       case 'green':
-        return updateColor(newColor.setRGB(color.r, x, color.b))
+        return updateColor(newColor.set(color.r, x, color.b))
       case 'blue':
-        return updateColor(newColor.setRGB(color.r, color.g, x))
+        return updateColor(newColor.set(color.r, color.g, x))
       case 'luminosity':
         return updateColor(newColor.setHSL(color.hsl.h, color.hsl.s, x))
       case 'saturation':
@@ -89,7 +89,7 @@ export const initSlider = (root: Root, div: HTMLDivElement, mode: SliderMode) =>
 
       case 'red': {
         imageUpdate(t => {
-          _color.setRGB(t, color.g, color.b)
+          _color.set(t, color.g, color.b)
         })
         cursorUpdate(color.r)
         cursor.style.backgroundColor = 'white'
@@ -98,7 +98,7 @@ export const initSlider = (root: Root, div: HTMLDivElement, mode: SliderMode) =>
 
       case 'green': {
         imageUpdate(t => {
-          _color.setRGB(color.r, t, color.b)
+          _color.set(color.r, t, color.b)
         })
         cursorUpdate(color.g)
         cursor.style.backgroundColor = 'white'
@@ -107,7 +107,7 @@ export const initSlider = (root: Root, div: HTMLDivElement, mode: SliderMode) =>
 
       case 'blue': {
         imageUpdate(t => {
-          _color.setRGB(color.r, color.g, t)
+          _color.set(color.r, color.g, t)
         })
         cursorUpdate(color.b)
         cursor.style.backgroundColor = 'white'

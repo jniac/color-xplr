@@ -1,8 +1,9 @@
 import { rgb_to_hsl, rgb_to_hsv, hsl_to_rgb, hsv_to_rgb, rgb_to_grayscale } from './color-conversion'
-import { clamp01, lerpUnclamped, moduloShortLerp, positiveModulo, to0xff } from './utils'
+import { clamp01, lerpUnclamped, moduloShortLerp, positiveModulo, to0xff, toFF } from './utils'
 
 /**
  * Utility class that represents a color (rgba + hsl / hsv).
+ * `r, g, b, a` values are between 0 and 1.
  * @public
  */
 export class Color {
@@ -21,6 +22,12 @@ export class Color {
     h: 0,
     s: 0,
     v: 1,
+  }
+
+  constructor(arg?: Parameters<Color['from']>[0]) {
+    if (arg) {
+      this.from(arg)
+    }
   }
 
   isEquivalent(other: Color) {
@@ -50,7 +57,7 @@ export class Color {
     return new Color().copy(this)
   }
 
-  setRGB(r: number, g: number, b: number, a = 1) {
+  set(r: number, g: number, b: number, a = 1) {
     this.r = r
     this.g = g
     this.b = b
@@ -94,16 +101,23 @@ export class Color {
 
   fromHex(hex: number) {
     hex = Math.floor(hex)
-    const r = (hex >> 16 & 255) / 255
-    const g = (hex >> 8 & 255) / 255
-    const b = (hex & 255) / 255
-    return this.setRGB(r, g, b)
+    const r = (hex >> 16 & 0xff) / 0xff
+    const g = (hex >> 8 & 0xff) / 0xff
+    const b = (hex & 0xff) / 0xff
+    return this.set(r, g, b)
   }
 
   fromCss(str: string) {
     str = str.trim().toLowerCase()
-    if (/^#?[0-9a-f]{6}$/i.test(str)) {
+    if (/^#?[0-9a-f]{6}$/i.test(str) || /^#?[0-9a-f]{8}$/i.test(str)) {
+      str = str.replace('#', '')
+      const [r, g, b, a = 1] = [str.slice(0, 2), str.slice(2, 4), str.slice(4, 6), str.slice(6, 8) || 'ff'].map(x => Number.parseInt(x + x, 16) / 0xff)
       return this.fromHex(Number.parseInt(str.slice(-6), 16))
+    }
+    // https://en.wikipedia.org/wiki/Web_colors#Hex_triplet
+    if (/^#?[0-9a-f]{3,4}$/i.test(str)) {
+      const [r, g, b, a = 1] = str.replace('#', '').split('').map(x => Number.parseInt(`${x}${x}`, 16) / 0xff)
+      return this.set(r, g, b, a)
     }
     if (str.startsWith('rgb(') && str.endsWith(')')) {
       str = str.slice(4, -1)
@@ -126,7 +140,7 @@ export class Color {
       */
       if (/\d+%?\s*,\s*\d+%?\s*,\s*\d+%?.*/.test(str)) {
         const [r, g, b, a = 1] = str.split(/\s*,\s*/).map(map)
-        return this.setRGB(r, g, b, a)
+        return this.set(r, g, b, a)
       }
       /* handling:
         rgb(255 122 127 / 20%)
@@ -134,14 +148,14 @@ export class Color {
       */
       if (/\d+%? \d+%? \d+%?.*/.test(str)) {
         const [r, g, b, a = 1] = str.split(/[\s/]+/).map(map)
-        return this.setRGB(r, g, b, a)
+        return this.set(r, g, b, a)
       }
       throw new Error(`Unsupported RGB string format: "${str}"`)
     }
     throw new Error(`Unsupported string format: "${str}"`)
   }
 
-  set(arg: string | number | { r: number; g: number; b: number; a?: number } | { h: number; s: number; l: number; a?: number }) {
+  from(arg: string | number | { r: number; g: number; b: number; a?: number } | { h: number; s: number; l: number; a?: number } | { h: number; s: number; v: number; a?: number }) {
     switch (typeof arg) {
       case 'string': {
         return this.fromCss(arg)
@@ -151,10 +165,14 @@ export class Color {
       }
       case 'object': {
         if ('r' in arg) {
-          return this.setRGB(arg.r, arg.g, arg.b, arg.a)
+          return this.set(arg.r, arg.g, arg.b, arg.a)
         }
         if ('h' in arg) {
-          return this.setHSL(arg.h, arg.s, arg.l, arg.a)
+          if ('l' in arg) {
+            return this.setHSL(arg.h, arg.s, arg.l, arg.a)
+          } else {
+            return this.setHSL(arg.h, arg.s, arg.v, arg.a)
+          }
         }
       }
     }
@@ -168,7 +186,7 @@ export class Color {
         const g = lerpUnclamped(color1.g, color2.g, alpha)
         const b = lerpUnclamped(color1.b, color2.b, alpha)
         const a = lerpUnclamped(color1.a, color2.a, alpha)
-        this.setRGB(r, g, b, a)
+        this.set(r, g, b, a)
         break
       }
       case 'hsl': {
@@ -207,7 +225,7 @@ export class Color {
   negate(mode: 'rgb' | 'hsl' | 'hsv' = 'rgb') {
     switch (mode) {
       case 'rgb': {
-        return this.setRGB(1 - this.r, 1 - this.g, 1 - this.b)
+        return this.set(1 - this.r, 1 - this.g, 1 - this.b)
       }
       case 'hsl': {
         const { h, s, l } = this.hsl
@@ -253,6 +271,8 @@ export class Color {
   }
 
   toCss() {
-    return `#${this.toHex().toString(16).padStart(6, '0')}`
+    return this.a < 1
+      ? `#${toFF(this.r)}${toFF(this.g)}${toFF(this.b)}${toFF(this.a)}`
+      : `#${toFF(this.r)}${toFF(this.g)}${toFF(this.b)}`
   }
 }

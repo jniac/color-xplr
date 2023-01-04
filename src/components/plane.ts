@@ -52,11 +52,11 @@ export const initPlane = (root: Root, div: HTMLDivElement, mode: PlaneMode) => {
       case 'hue':
         return updateColor(newColor.setHSV(color.hsv.h, x, 1 - y))
       case 'red':
-        return updateColor(newColor.setRGB(color.r, x, 1 - y))
+        return updateColor(newColor.set(color.r, x, 1 - y))
       case 'green':
-        return updateColor(newColor.setRGB(x, color.g, 1 - y))
+        return updateColor(newColor.set(x, color.g, 1 - y))
       case 'blue':
-        return updateColor(newColor.setRGB(x, 1 - y, color.b))
+        return updateColor(newColor.set(x, 1 - y, color.b))
       case 'shift': {
         const interpolate = getCompInterpolation(color)
         interpolate(x, y)
@@ -108,7 +108,7 @@ export const initPlane = (root: Root, div: HTMLDivElement, mode: PlaneMode) => {
   }
 
   const update = () => {
-    let interpolateXY: PlaneInterpolation = (x, y) => _color.setRGB(1, 1, 1)
+    let interpolateXY: PlaneInterpolation = (x, y) => _color.set(1, 1, 1)
     switch (mode) {
       case 'hue': {
         interpolateXY = (x, y) => {
@@ -119,21 +119,21 @@ export const initPlane = (root: Root, div: HTMLDivElement, mode: PlaneMode) => {
       }
       case 'red': {
         interpolateXY = (x, y) => {
-          return _color.setRGB(color.r, x, 1 - y)
+          return _color.set(color.r, x, 1 - y)
         }
         cursorCoords.set(color.g, 1 - color.b)
         break
       }
       case 'green': {
         interpolateXY = (x, y) => {
-          return _color.setRGB(x, color.g, 1 - y)
+          return _color.set(x, color.g, 1 - y)
         }
         cursorCoords.set(color.r, 1 - color.b)
         break
       }
       case 'blue': {
         interpolateXY = (x, y) => {
-          return _color.setRGB(x, 1 - y, color.b)
+          return _color.set(x, 1 - y, color.b)
         }
         cursorCoords.set(color.r, 1 - color.g)
         break
