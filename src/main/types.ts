@@ -44,7 +44,7 @@ export type ModalArg = {
 /**
  * @public
  */
-export type CreateColorXplrArgs = Partial<{
+export type CreateColorXplrArg = Partial<{
   /** The key used for local storage of preferences. */
   storeKey: string
   /** Should the Color Xplr be displayed through a modal? If so, precise here the source element. */

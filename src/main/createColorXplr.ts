@@ -7,7 +7,7 @@ import { html } from './html'
 import { createModal } from './modal'
 import { ColorXplrApp, Root } from './root'
 import { css } from './style.css'
-import { CreateColorXplrArgs, StyleSettigns, PlaneMode } from './types'
+import { CreateColorXplrArg, StyleSettigns, PlaneMode } from './types'
 
 const processStyleSettings = (element: HTMLElement, settings: StyleSettigns) => {
   const ensureString = (value: number | string, unit?: string) => {
@@ -46,7 +46,7 @@ export const createColorXplr = ({
   onChange,
   onFinish,
   ...props
-}: CreateColorXplrArgs = {}): ColorXplrApp => {
+}: CreateColorXplrArg = {}): ColorXplrApp => {
   const store = createStore(storeKey)
 
   const div = document.createElement('div')

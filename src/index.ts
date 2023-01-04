@@ -1,7 +1,7 @@
 import { Destroyable, Node, NodeCallback } from './core/node'
 import { createColorXplr } from './main/createColorXplr'
 import { ColorXplrApp } from './main/root'
-import { PlaneMode, CreateColorXplrArgs, ModalArg, StyleSettigns } from './main/types'
+import { PlaneMode, CreateColorXplrArg, ModalArg, StyleSettigns } from './main/types'
 import { Color, HorizontalAlign, HorizontalAlignBase, SpaceAlign, VerticalAlignBase, VerticalAlign } from './math'
 
 export {
@@ -11,7 +11,7 @@ export {
   VerticalAlignBase,
   VerticalAlign,
   Color,
-  CreateColorXplrArgs,
+  CreateColorXplrArg,
   createColorXplr,
   ModalArg,
   StyleSettigns,
