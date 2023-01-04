@@ -13,8 +13,9 @@ export const build = async () => {
   const tmpTscDir = path.join(tmp, `tmp-${now}`)
   const tmpLibDir = path.join(tmp, `lib-${now}`)
 
-  await task.run('esbuild', async () => {
-    await esbuild.build({
+  // module
+  await task.run('esbuild (module)', () => {
+    esbuild.build({
       entryPoints: ['src/index.ts'],
       outdir: tmpLibDir,
       bundle: true,
@@ -26,6 +27,19 @@ export const build = async () => {
     })
   })
 
+  // commonjs
+  await task.run('esbuild (node)', () => {
+    esbuild.build({
+      entryPoints: ['src/index.ts'],
+      outdir: path.join(tmpLibDir, 'node'),
+      bundle: true,
+      sourcemap: true,
+      minify: true,
+      format: 'cjs',
+      target: ['es6'],
+    })
+  })
+  
   await task.run('tsc', async () => {
     try {
       const { stderr } = await asyncExec(`npx tsc --declaration  --emitDeclarationOnly --outDir ${tmpTscDir}`)

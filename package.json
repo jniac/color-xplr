@@ -1,17 +1,20 @@
 {
   "name": "@jniac/color-xplr",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "It's a funky-damn-cool color explorer (in the browser) for frustrated creatives. It's not a picker, it's an explorer.",
-  "main": "lib/index.js",
-  "module": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./lib/index.js",
+      "node": "./lib/node/index.js"
+    }
+  },
+  "types": "./lib/index.d.ts",
   "scripts": {
     "dev": "node scripts/watch.mjs",
     "build": "node scripts/build.mjs",
     "test": "echo \"Run a live server and go to http://localhost:XXXX/test/vanilla\""
   },
   "keywords": [
-    "react",
     "creative",
     "color explorer",
     "color picker",
@@ -19,7 +22,8 @@
     "picker",
     "sketch",
     "chrome",
-    "popup"
+    "popup",
+    "react-compatible"
   ],
   "author": "Joseph M. <joseph.merdrignac@gmail.com>",
   "license": "ISC",
