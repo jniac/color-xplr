@@ -2,6 +2,7 @@
   "name": "@jniac/color-xplr",
   "version": "1.0.5",
   "description": "It's a funky-damn-cool color explorer (in the browser) for frustrated creatives. It's not a picker, it's an explorer.",
+  "module": "./lib/index.js",
   "exports": {
     ".": {
       "import": "./lib/index.js",
