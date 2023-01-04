@@ -111,8 +111,13 @@ export class Color {
     str = str.trim().toLowerCase()
     if (/^#?[0-9a-f]{6}$/i.test(str) || /^#?[0-9a-f]{8}$/i.test(str)) {
       str = str.replace('#', '')
-      const [r, g, b, a = 1] = [str.slice(0, 2), str.slice(2, 4), str.slice(4, 6), str.slice(6, 8) || 'ff'].map(x => Number.parseInt(x + x, 16) / 0xff)
-      return this.fromHex(Number.parseInt(str.slice(-6), 16))
+      const [r, g, b, a = 1] = [
+        str.slice(0, 2), 
+        str.slice(2, 4), 
+        str.slice(4, 6), 
+        str.slice(6, 8) || 'ff',
+      ].map(x => Number.parseInt(x, 16) / 0xff)
+      return this.set(r, g, b, a)
     }
     // https://en.wikipedia.org/wiki/Web_colors#Hex_triplet
     if (/^#?[0-9a-f]{3,4}$/i.test(str)) {
@@ -270,8 +275,10 @@ export class Color {
     return (to0xff(this.r) << 16) + (to0xff(this.g) << 8) + to0xff(this.b)
   }
 
-  toCss() {
-    return this.a < 1
+  toCss({
+    includeAlpha = 'auto' as 'auto' | 'never' | 'always'
+  } = {}) {
+    return includeAlpha === 'always' || (includeAlpha === 'auto' && this.a < 1)
       ? `#${toFF(this.r)}${toFF(this.g)}${toFF(this.b)}${toFF(this.a)}`
       : `#${toFF(this.r)}${toFF(this.g)}${toFF(this.b)}`
   }
