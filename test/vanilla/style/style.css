@@ -9,9 +9,10 @@ body {
 .Loading {
   background-color: #fff6;
   font-size: 3em;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   transition: opacity .5s ease-in-out;
+  z-index: 1;
 }
 
 .Loading.hidden {
