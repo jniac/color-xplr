@@ -30,6 +30,8 @@ ${stringCss}
   background-color: var(--background-color);
   border-radius: var(--padding);
   font-family: 'Fira Code', monospace;
+  /* Quite an hack: transform: scale(1) is here to force the html element to be rendered as a flat object, and prevent inner z-index to fight with outer elements. */
+  transform: scale(1);
 }
 
 #color-xplr .colors {
