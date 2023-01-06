@@ -1,11 +1,23 @@
 export const stringCss = /* css */`
 #color-xplr .string {
   --color: white;
+  --background-color: black;
   display: flex;
   flex-direction: column;
   border-radius: 4px;
   color: var(--color);
   transition: filter .3s ease-out;
+  background-size: var(--slider-height);
+  background-position: center;
+}
+
+#color-xplr .string .background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--background-color);
 }
 
 #color-xplr .string.flash {

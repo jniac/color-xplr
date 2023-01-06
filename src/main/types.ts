@@ -49,8 +49,17 @@ export type CreateColorXplrArg = Partial<{
   storeKey: string
   /** Should the Color Xplr be displayed through a modal? If so, precise here the source element. */
   modal: ModalArg
+  /** The mode of the "plane" (the top square). */
   mode: PlaneMode
+  /** 
+   * The initial color, accepted values:
+   * - #RRGGBB
+   * - #RGB
+   * - rgb(255, 255, 255)
+   * - rgb(0%, 100%, 100%)
+  */
   color: string
+  useAlpha: boolean
   onChange: (app: ColorXplrApp) => void
   onFinish: (app: ColorXplrApp) => void
 }> & StyleSettigns

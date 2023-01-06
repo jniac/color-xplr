@@ -48,3 +48,16 @@ export const handlePointer = (element: HTMLElement, margin: number, callback: (i
     destroy,
   }
 }
+
+/**
+ * Generate a checker in svg for element.style.backgroundImage assigment.
+ */
+export const getBackgroundImage = (colorA = '#bbb', colorB = '#ddd') => {
+  const svg = `
+    <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+      <rect fill="${colorB}" width="20" height="20"></rect>
+      <path fill="${colorA}" d="M0,0L10,0L10,10L0,10Z M10,10L20,10L20,20L10,20Z"></path>
+    </svg>
+  `.replace(/\s+/g, ' ')
+  return `url("data:image/svg+xml,${encodeURIComponent(svg)}`
+}

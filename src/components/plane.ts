@@ -50,18 +50,18 @@ export const initPlane = (root: Root, div: HTMLDivElement, mode: PlaneMode) => {
   const pointerHandler = handlePointer(div, 0, ({ x, y }) => {
     switch (mode) {
       case 'hue':
-        return updateColor(newColor.setHSV(color.hsv.h, x, 1 - y))
+        return updateColor(newColor.setHSV(color.hsv.h, x, 1 - y, color.a))
       case 'red':
-        return updateColor(newColor.set(color.r, x, 1 - y))
+        return updateColor(newColor.set(color.r, x, 1 - y, color.a))
       case 'green':
-        return updateColor(newColor.set(x, color.g, 1 - y))
+        return updateColor(newColor.set(x, color.g, 1 - y, color.a))
       case 'blue':
-        return updateColor(newColor.set(x, 1 - y, color.b))
-      case 'shift': {
-        const interpolate = getCompInterpolation(color)
-        interpolate(x, y)
-        return updateColor(newColor.copy(_color))
-      }
+        return updateColor(newColor.set(x, 1 - y, color.b, color.a))
+      // case 'shift': {
+      //   const interpolate = getCompInterpolation(color)
+      //   interpolate(x, y)
+      //   return updateColor(newColor.copy(_color))
+      // }
     }
   }, {
     skip: event => {

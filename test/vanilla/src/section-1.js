@@ -24,7 +24,7 @@ const updateColor = (hex, oppositeHex) => {
   document.body.style.color = oppositeHex
 }
 
-updateColor('#b3c8dd', new Color().fromCss('#b3c8dd').opposite().toCss())
+updateColor('#a6eedd', new Color().fromCss('#a6eedd').opposite().toCss())
 
 for (const colorInput of colorInputs) {
   colorInput.input.addEventListener('click', event => {
@@ -33,6 +33,7 @@ for (const colorInput of colorInputs) {
     createColorXplr({
       color: colorInput.input.value,
       mode,
+      useAlpha: document.querySelector('input[name=useAlpha]').checked,
       modal: {
         source: colorInput.input,
         align,

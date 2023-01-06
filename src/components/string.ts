@@ -1,11 +1,13 @@
 import { Color } from '../math/color'
 import { Root } from '../main/root'
+import { getBackgroundImage } from './utils'
 
 type StringMode = 'hex' | 'rgb'
 
 export const initString = (root: Root, div: HTMLDivElement, mode: StringMode) => {
   const input = div.querySelector('input') as HTMLInputElement
   const copy = div.querySelector('.copy') as HTMLDivElement
+  div.style.backgroundImage = getBackgroundImage()
  
   const { color, updateColor } = root
 
@@ -19,8 +21,8 @@ export const initString = (root: Root, div: HTMLDivElement, mode: StringMode) =>
   
   const update = () => {
     div.style.setProperty('--color', color.toGrayscale() > .5 ? 'black' : 'white')
+    div.style.setProperty('--background-color', color.toCss()) 
     input.value = color.toCss()
-    div.style.backgroundColor = color.toCss()
   }
 
   input.addEventListener('input', () => {

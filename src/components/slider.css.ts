@@ -22,6 +22,8 @@ export const sliderCss = /* css */`
   height: var(--slider-height);
   flex: 1;
   border-radius: calc(var(--slider-height) / 2);
+  background-size: var(--slider-height);
+  background-position: center;
 }
 
 #color-xplr .slider .cursor {

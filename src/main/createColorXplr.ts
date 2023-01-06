@@ -1,5 +1,5 @@
 import { initPlane } from '../components/plane'
-import { initSlider } from '../components/slider'
+import { initSlider, SliderMode } from '../components/slider'
 import { initString } from '../components/string'
 import { createStore } from '../core/store'
 import { Color } from '../math'
@@ -43,6 +43,7 @@ export const createColorXplr = ({
   color: initialColorStr, 
   modal,
   mode = PlaneMode.hue,
+  useAlpha = true,
   onChange,
   onFinish,
   ...props
@@ -76,13 +77,15 @@ export const createColorXplr = ({
 
   const planeDiv = div.querySelector('.plane') as HTMLDivElement
   initPlane(root, planeDiv, mode)
-  const divs = [...div.querySelectorAll('.sliders > .slider')] as HTMLDivElement[]
-  initSlider(root, divs.shift()!, 'hue')
-  initSlider(root, divs.shift()!, 'luminosity')
-  initSlider(root, divs.shift()!, 'saturation')
-  initSlider(root, divs.shift()!, 'red')
-  initSlider(root, divs.shift()!, 'green')
-  initSlider(root, divs.shift()!, 'blue')
+  initSlider(root, SliderMode.hue)
+  initSlider(root, SliderMode.luminosity)
+  initSlider(root, SliderMode.saturation)
+  initSlider(root, SliderMode.red)
+  initSlider(root, SliderMode.green)
+  initSlider(root, SliderMode.blue)
+  if (useAlpha) {
+    initSlider(root, SliderMode.alpha)
+  }
   const stringDiv = div.querySelector('.string') as HTMLDivElement
   initString(root, stringDiv, 'hex')
 
