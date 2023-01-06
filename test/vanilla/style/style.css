@@ -40,18 +40,24 @@ body {
 
 .app .abs {
   position: absolute;
+  --padding: 32px;
 }
+
+.app * {
+  color: inherit;
+}
+
 .app .abs.top {
-  top: 0;
+  top: var(--padding);
 }
 .app .abs.left {
-  left: 0;
+  left: var(--padding);
 }
 .app .abs.right {
-  right: 0;
+  right: var(--padding);
 }
 .app .abs.bottom {
-  bottom: 0;
+  bottom: var(--padding);
 }
 
 .app .ColorInput.abs {
