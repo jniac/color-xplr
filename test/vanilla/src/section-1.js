@@ -3,7 +3,7 @@ import { initAlignSelect, initModeSelect } from './init-select.js'
 
 Object.assign(window, { Color, createColorXplr })
 
-let align = 'left'
+let align = 'right'
 let mode = ColorXplrMode.blue
 
 initAlignSelect(align, value => align = value)
