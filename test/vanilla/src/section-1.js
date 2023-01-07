@@ -1,4 +1,4 @@
-import { Color, ColorXplrMode, createColorXplr } from '../../../lib/index.js'
+import { Color, ColorXplrMode, createColorXplr } from '@jniac/color-xplr'
 import { initAlignSelect, initModeSelect } from './init-select.js'
 
 Object.assign(window, { Color, createColorXplr })
