@@ -22,13 +22,16 @@ export const initSlider = (root: Root, mode: SliderMode) => {
   const slidersDiv = rootDiv.querySelector('.sliders') as HTMLDivElement
   const div = factory.slider()
   slidersDiv.append(div)
-  div.querySelector('canvas')!.style.backgroundImage = getBackgroundImage()
 
   div.classList.add(mode)
   const canvas = div.querySelector('canvas') as HTMLCanvasElement
   const cursor = div.querySelector('.cursor') as HTMLDivElement
 
-  if (mode !== 'hue') {
+  if (mode === SliderMode.alpha) {
+    div.querySelector('canvas')!.style.backgroundImage = getBackgroundImage()
+  }
+
+  if (mode !== SliderMode.hue) {
     cursor.innerHTML = `<span>${mode[0].toUpperCase()}</span>`
   }
 
