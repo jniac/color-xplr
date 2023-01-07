@@ -6,7 +6,7 @@ It's not a picker, it's an explorer.
 [Here's a demo.](https://jniac.github.io/color-xplr/test/vanilla/)
 
 <a href="https://jniac.github.io/color-xplr/test/vanilla/">
-  <img width="640" src="extras/screen-1.jpg">
+  <img width="640" src="extras/screen-1.png">
 </a>
 
 ## Features:
