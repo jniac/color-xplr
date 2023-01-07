@@ -15,10 +15,17 @@ export const task = {
     const duration = Date.now() - startTime
     console.log(`${token}: ${duration}ms`)
   },
+  /**
+   * @template T
+   * @param {string} token 
+   * @param {() => T} callback 
+   * @returns {Promise<T>}
+   */
   run: async (token, callback) => {
     task.start(token)
-    await callback()
+    const rslt = await callback()
     task.end(token)
+    return rslt
   },
 }
 
