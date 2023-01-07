@@ -1,8 +1,9 @@
-import { Color, ColorXplrMode, createColorXplr } from '@jniac/color-xplr'
+import { Color, ColorXplrMode, createColorXplr } from '../../../lib/index.js'
 import { initAlignSelect, initModeSelect } from './init-select.js'
 
 Object.assign(window, { Color, createColorXplr })
 
+const initialColor = '#5e6cdd'
 let align = 'right'
 let mode = ColorXplrMode.blue
 
@@ -24,7 +25,7 @@ const updateColor = (hex, oppositeHex) => {
   document.body.style.color = oppositeHex
 }
 
-updateColor('#a6eedd', new Color().fromCss('#a6eedd').opposite().toCss())
+updateColor(initialColor, new Color().fromCss(initialColor).opposite().toCss())
 
 for (const colorInput of colorInputs) {
   colorInput.input.addEventListener('click', event => {
@@ -37,8 +38,11 @@ for (const colorInput of colorInputs) {
       modal: {
         source: colorInput.input,
         align,
+        containerPadding: 24,
       },
-      ...colorInput.input.dataset,
+      style: {
+        ...colorInput.input.dataset,
+      },
       onChange: app => {
         const { hex, color } = app
         const oppositeHex = color.clone().opposite().toCss()

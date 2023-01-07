@@ -7,9 +7,32 @@ import { html } from './html'
 import { createModal } from './modal'
 import { ColorXplrApp, Root } from './root'
 import { css } from './style.css'
-import { CreateColorXplrArg, StyleSettigns, PlaneMode } from './types'
+import { ColorXplrParams, StyleParams, PlaneMode, colorXplrParamsDefaults } from './types'
 
-const processStyleSettings = (element: HTMLElement, settings: StyleSettigns) => {
+const styleClassName = 'color-xplr-HDSL284H10LDK894'
+/**
+ * Create the root style element, only if not already there.
+ */
+const ensureStyleElement = () => {
+  if (document.head.querySelector(`style.${styleClassName}`) === null) {
+    const style = document.createElement('style')
+    style.className = styleClassName
+    style.innerHTML = css
+    document.head.append(style)
+  }
+}
+
+/**
+ * Destroys (removes) the previously created style element (document.head).
+ */
+const destroyStyleElement = () => {
+  document.head.querySelector(`style.${styleClassName}`)?.remove()
+}
+
+/**
+ * Process the custom style params. 
+ */
+const processCustomStyle = (element: HTMLElement, stykeParams: StyleParams) => {
   const ensureString = (value: number | string, unit?: string) => {
     value = value.toString()
     if (unit && value.endsWith(unit) === false) {
@@ -22,7 +45,7 @@ const processStyleSettings = (element: HTMLElement, settings: StyleSettigns) => 
     width,
     sliderHeight,
     backgroundColor,
-  } = settings ?? {}
+  } = stykeParams ?? {}
   if (width) {
     element.style.setProperty('--width', ensureString(width, 'px'))
   }
@@ -39,26 +62,27 @@ const processStyleSettings = (element: HTMLElement, settings: StyleSettigns) => 
  * @public
  */
 export const createColorXplr = ({
-  storeKey = 'color-xplr', 
-  color: initialColorStr, 
   modal,
-  mode = PlaneMode.hue,
-  useAlpha = true,
+  style,
+  storeKey = colorXplrParamsDefaults.storeKey, 
+  color: initialColorStr = colorXplrParamsDefaults.color, 
+  mode = colorXplrParamsDefaults.mode,
+  alpha = colorXplrParamsDefaults.alpha,
+  removeStyleElementOnDestroy = colorXplrParamsDefaults.removeStyleElementOnDestroy,
   onChange,
   onFinish,
-  ...props
-}: CreateColorXplrArg = {}): ColorXplrApp => {
+}: ColorXplrParams = {}): ColorXplrApp => {
   const store = createStore(storeKey)
 
   const div = document.createElement('div')
   div.innerHTML = html
   div.id = 'color-xplr'
 
-  processStyleSettings(div, props)
+  ensureStyleElement()
 
-  const style = document.createElement('style')
-  style.innerHTML = css
-  document.head.append(style)
+  if (style) {
+    processCustomStyle(div, style)
+  }
 
   const initialColor = new Color().from(initialColorStr ?? store.get('color') ?? '#e9e59a')
   const color = initialColor.clone()
@@ -71,8 +95,10 @@ export const createColorXplr = ({
 
   const root = new Root(div, store, initialColor, color, updateColor)
   root.onDestroy(() => {
-    style.remove()
     div.remove()
+    if (removeStyleElementOnDestroy) {
+      destroyStyleElement()
+    }
   })
 
   const planeDiv = div.querySelector('.plane') as HTMLDivElement
@@ -83,7 +109,7 @@ export const createColorXplr = ({
   initSlider(root, SliderMode.red)
   initSlider(root, SliderMode.green)
   initSlider(root, SliderMode.blue)
-  if (useAlpha) {
+  if (alpha) {
     initSlider(root, SliderMode.alpha)
   }
   const stringDiv = div.querySelector('.string') as HTMLDivElement

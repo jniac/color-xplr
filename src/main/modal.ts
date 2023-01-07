@@ -1,9 +1,9 @@
 import { onDirectTap, onKey } from './utils'
 import { Root } from './root'
 import { Point, Rect } from '../math'
-import { ModalArg } from './types'
+import { ModalParams, modalParamsDefaults } from './types'
 
-const getOuterRect = (arg: Window | HTMLElement, margin: number) => {
+const getContainerRect = (arg: Window | HTMLElement, margin: number) => {
   if (arg instanceof Window) {
     return new Rect().set(0, 0, window.innerWidth, window.innerHeight).inflate(-margin)
   } else {
@@ -12,30 +12,37 @@ const getOuterRect = (arg: Window | HTMLElement, margin: number) => {
   }
 }
 
-export const createModal = (app: Root, modal: ModalArg) => {
+export const createModal = (app: Root, modal: ModalParams) => {
   const {
     source,
-    container = document.body,
-    outerRect: outerRectArg = window,
-    outerMargin = 8,
-    zIndex = 10,
-    align = 'center'
+    sourceMargin = modalParamsDefaults.sourceMargin!,
+    container = modalParamsDefaults.container!,
+    containerRect: containerRectArg = container ?? modalParamsDefaults.containerRect,
+    containerPadding = modalParamsDefaults.containerPadding!,
+    zIndex = modalParamsDefaults.zIndex!,
+    align = modalParamsDefaults.align!,
   } = modal
 
-  source.blur()
-
-  const sourceRect = new Rect().apply(source.getBoundingClientRect()).inflate(10)
-
   const div = document.createElement('div')
+  div.focus()
   div.id = 'color-xplr-modal'
   div.style.zIndex = String(zIndex)
   div.append(app.div)
   container.append(div)
 
+  // Positioning:
+  const containerRect = getContainerRect(containerRectArg, containerPadding)
+  const sourceRect = new Rect()
+  if (source) {
+    sourceRect.apply(source.getBoundingClientRect())
+  } else {
+    sourceRect.set(containerRect.centerX, containerRect.centerY, 0, 0)
+  }
+  sourceRect.inflate(sourceMargin)
   const appRect = new Rect().apply(app.div.getBoundingClientRect())
   const alignPoint = new Point().apply(align)
   appRect.setPivot(alignPoint.clone().comp(), sourceRect.getPivot(alignPoint))
-  appRect.moveInside(getOuterRect(outerRectArg, outerMargin))
+  appRect.moveInside(containerRect)
   app.div.style.top = `${Math.round(appRect.top)}px`
   app.div.style.left = `${Math.round(appRect.left)}px`
 
