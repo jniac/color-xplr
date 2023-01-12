@@ -1,4 +1,5 @@
 import { copySvg } from '../assets/copy.svg'
+import { refreshSvg } from '../assets/refresh.svg'
 
 export const slider: string = /* html */`
   <div class="slider">
@@ -21,7 +22,10 @@ export const html: string = /* html */ `
   <div class="string">
     <div class="background"></div>
     <input />
-    <div class="copy">
+    <div class="btn next">
+      ${refreshSvg}
+    </div>
+    <div class="btn copy">
       ${copySvg}
     </div>
   </div>

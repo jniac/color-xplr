@@ -32,20 +32,28 @@ export const stringCss = /* css */`
   background-color: transparent;
   padding: 32px 0;
   color: var(--color);
+  font-size: 9px;
 }
 
-#color-xplr .string .copy {
+#color-xplr .string .btn {
   --size: 12px;
   position: absolute;
   top: calc(50% - var(--size) / 2);
-  right: 16px;
   width: var(--size);
   height: var(--size);
   display: flex;
   cursor: pointer;
 }
 
-#color-xplr .string .copy svg {
+#color-xplr .string .next {
+  left: 8px;
+}
+
+#color-xplr .string .copy {
+  right: 8px;
+}
+
+#color-xplr .string .btn svg {
   width: 100%;
   height: 100%;
   fill: var(--color);

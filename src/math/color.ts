@@ -2,6 +2,20 @@ import { rgb_to_hsl, rgb_to_hsv, hsl_to_rgb, hsv_to_rgb, rgb_to_grayscale } from
 import { clamp01, lerpUnclamped, moduloShortLerp, positiveModulo, to0xff, toFF } from './utils'
 
 /**
+ * @public
+ */
+export type ColorToStringMode = 'hex' | 'rgb' | 'hsl' | 'glsl'
+
+/**
+ * @public
+ * Should the string contain alpha information?
+ * - `auto` : it depends from the alpha value (if different from 1.0)
+ * - `never` : never
+ * - `always` : always
+ */
+export type ColorToStringAlphaMode = 'auto' | 'never' | 'always'
+
+/**
  * Utility class that represents a color (rgba + hsl / hsv).
  * `r, g, b, a` values are between 0 and 1.
  * @public
@@ -112,9 +126,9 @@ export class Color {
     if (/^#?[0-9a-f]{6}$/i.test(str) || /^#?[0-9a-f]{8}$/i.test(str)) {
       str = str.replace('#', '')
       const [r, g, b, a = 1] = [
-        str.slice(0, 2), 
-        str.slice(2, 4), 
-        str.slice(4, 6), 
+        str.slice(0, 2),
+        str.slice(2, 4),
+        str.slice(4, 6),
         str.slice(6, 8) || 'ff',
       ].map(x => Number.parseInt(x, 16) / 0xff)
       return this.set(r, g, b, a)
@@ -275,11 +289,58 @@ export class Color {
     return (to0xff(this.r) << 16) + (to0xff(this.g) << 8) + to0xff(this.b)
   }
 
-  toCss({
-    includeAlpha = 'auto' as 'auto' | 'never' | 'always'
+  toCss({ includeAlpha = 'auto' as ColorToStringAlphaMode } = {}) {
+    return this.toHexString()
+  }
+
+  toGlslString({
+    includeAlpha = 'auto' as ColorToStringAlphaMode,
+    precision = 2,
+  } = {}) {
+    return includeAlpha === 'always' || (includeAlpha === 'auto' && this.a < 1)
+      ? `vec4(${this.r.toFixed(precision)}, ${this.g.toFixed(precision)}, ${this.b.toFixed(precision)}, ${this.a.toFixed(precision)})`
+      : `vec3(${this.r.toFixed(precision)}, ${this.g.toFixed(precision)}, ${this.b.toFixed(precision)})`
+  }
+
+  toHexString({
+    includeAlpha = 'auto' as ColorToStringAlphaMode,
   } = {}) {
     return includeAlpha === 'always' || (includeAlpha === 'auto' && this.a < 1)
       ? `#${toFF(this.r)}${toFF(this.g)}${toFF(this.b)}${toFF(this.a)}`
       : `#${toFF(this.r)}${toFF(this.g)}${toFF(this.b)}`
+  }
+
+  toRgbString({
+    includeAlpha = 'auto' as ColorToStringAlphaMode,
+  } = {}) {
+    const { r, g, b, a } = this
+    return includeAlpha === 'always' || (includeAlpha === 'auto' && a < 1)
+      ? `rgba(${to0xff(r)} ${to0xff(g)} ${to0xff(b)} / ${(a * 100).toFixed(0)}%)`
+      : `rgb(${to0xff(r)} ${to0xff(g)} ${to0xff(b)})`
+  }
+
+  toHslString({
+    includeAlpha = 'auto' as ColorToStringAlphaMode,
+  } = {}) {
+    const { a } = this
+    const { h, s, l } = this.hsl
+    return includeAlpha === 'always' || (includeAlpha === 'auto' && a < 1)
+      ? `hsla(${(h * 360).toFixed(0)}deg ${(s * 100).toFixed(0)}% ${(l * 100).toFixed(0)}% / ${(a * 100).toFixed(0)}%)`
+      : `hsl(${(h * 360).toFixed(0)}deg ${(s * 100).toFixed(0)}% ${(l * 100).toFixed(0)}%)`
+  }
+
+  toString({
+    mode = 'hex' as ColorToStringMode,
+    includeAlpha = 'auto' as ColorToStringAlphaMode,
+  } = {}) {
+    switch(mode) {
+      case 'hex': return this.toHexString({ includeAlpha })
+      case 'glsl': return this.toGlslString({ includeAlpha })
+      case 'rgb': return this.toRgbString({ includeAlpha })
+      case 'hsl': return this.toHslString({ includeAlpha })
+      default: {
+        throw new Error(`toString invalid mode "${mode}"`)
+      }
+    }
   }
 }

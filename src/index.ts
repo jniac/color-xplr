@@ -12,6 +12,8 @@ import {
 } from './main/types'
 import { 
   Color,
+  ColorToStringMode,
+  ColorToStringAlphaMode,
   HorizontalAlign,
   HorizontalAlignBase,
   SpaceAlign,
@@ -26,6 +28,8 @@ export {
   VerticalAlignBase,
   VerticalAlign,
   Color,
+  ColorToStringMode,
+  ColorToStringAlphaMode,
   ModalParams,
   modalParamsDefaults,
   StyleParams,
