@@ -103,14 +103,14 @@ export const createColorXplr = ({
 
   const planeDiv = div.querySelector('.plane') as HTMLDivElement
   initPlane(root, planeDiv, mode)
-  initSlider(root, SliderMode.hue)
-  initSlider(root, SliderMode.luminosity)
-  initSlider(root, SliderMode.saturation)
-  initSlider(root, SliderMode.red)
-  initSlider(root, SliderMode.green)
-  initSlider(root, SliderMode.blue)
+  initSlider(root, SliderMode.hue, style?.sliderHeight)
+  initSlider(root, SliderMode.luminosity, style?.sliderHeight)
+  initSlider(root, SliderMode.saturation, style?.sliderHeight)
+  initSlider(root, SliderMode.red, style?.sliderHeight)
+  initSlider(root, SliderMode.green, style?.sliderHeight)
+  initSlider(root, SliderMode.blue, style?.sliderHeight)
   if (alpha) {
-    initSlider(root, SliderMode.alpha)
+    initSlider(root, SliderMode.alpha, style?.sliderHeight)
   }
   const stringDiv = div.querySelector('.string') as HTMLDivElement
   initString(root, stringDiv)

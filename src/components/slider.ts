@@ -17,7 +17,7 @@ export enum SliderMode {
 const _color = new Color()
 const _color32 = _color.toColor32()
 
-export const initSlider = (root: Root, mode: SliderMode) => {
+export const initSlider = (root: Root, mode: SliderMode, sliderHeight: string | number = 18) => {
   const { div: rootDiv, color, updateColor } = root
   const slidersDiv = rootDiv.querySelector('.sliders') as HTMLDivElement
   const div = factory.slider()
@@ -39,7 +39,7 @@ export const initSlider = (root: Root, mode: SliderMode) => {
   const imageData = new ImageData(256, 1)
   const { data } = imageData
 
-  const margin = 9
+  const margin = Number.parseFloat(`${sliderHeight}`) / 2
 
   const newColor = new Color()
   const pointerHandler = handlePointer(div, margin, ({ x }) => {
