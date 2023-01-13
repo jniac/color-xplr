@@ -61,11 +61,11 @@ export const stringCss = /* css */`
 }
 
 #color-xplr .string .abs.left {
-  left: 8px;
+  left: 7px;
 }
 
 #color-xplr .string .abs.right {
-  right: 8px;
+  right: 7px;
 }
 
 #color-xplr .string .btn.alpha {

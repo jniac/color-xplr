@@ -39,7 +39,7 @@ export const initSlider = (root: Root, mode: SliderMode) => {
   const imageData = new ImageData(256, 1)
   const { data } = imageData
 
-  const margin = 10
+  const margin = 9
 
   const newColor = new Color()
   const pointerHandler = handlePointer(div, margin, ({ x }) => {
