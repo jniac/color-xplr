@@ -32,7 +32,7 @@ export const initString = (root: Root, div: HTMLDivElement) => {
     div.classList.add('flash')
     window.requestAnimationFrame(() => {
       div.classList.remove('flash')
-      navigator.clipboard.writeText(color.toString({ mode }))
+      navigator.clipboard.writeText(input.value)
     })
   }
 
