@@ -6,7 +6,7 @@ It's not a picker, it's an explorer.
 [Here's a demo.](https://jniac.github.io/color-xplr/test/vanilla/)
 
 <a href="https://jniac.github.io/color-xplr/test/vanilla/">
-  <img width="640" src="extras/screen-1.png">
+  <img width="640" src="extras/screen-2.png">
 </a>
 
 ## Features:
@@ -14,6 +14,19 @@ It's not a picker, it's an explorer.
 - "copy to clipboard" button
 - hue, luminosity, saturation, red, green & blue sliders (for fine control over tint).
 - modal position: "align" mode & "stay-inside-window" feature
+- string mode: 
+  - hex: 
+    - `#f9bd77`
+    - `#f9bd77ff`
+  - rgb: 
+    - `rgb(249 189 119)`
+    - `rgba(249 189 119 / 100%)`
+  - hsl: 
+    - `hsl(32deg 92% 72%)`
+    - `hsla(32deg 92% 72% / 100%)`
+  - glsl: 
+    - `vec3(0.98, 0.74, 0.47)`
+    - `vec4(0.98, 0.74, 0.47, 1.00)`
 
 ## About
 
