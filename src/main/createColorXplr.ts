@@ -113,7 +113,7 @@ export const createColorXplr = ({
     initSlider(root, SliderMode.alpha)
   }
   const stringDiv = div.querySelector('.string') as HTMLDivElement
-  initString(root, stringDiv, 'hex')
+  initString(root, stringDiv)
 
   const update = () => {
     root.call('update', true)
