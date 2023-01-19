@@ -1,3 +1,6 @@
+# 1.0.11
+- Fix missing `Partial<>` in modal params declaration.
+
 # 1.0.10
 - Color.toString(): "string" mode (hex, rgb, hsl, glsl) & "alpha" mode (always, never, auto)
 - Explorer: 
