@@ -56,7 +56,7 @@ export const modalParamsDefaults = {
 }
 
 /** @public */
-export type ModalParams = typeof modalParamsDefaults
+export type ModalParams = Partial<typeof modalParamsDefaults>
 
 /** @public */
 export const colorXplrParamsDefaults = {
