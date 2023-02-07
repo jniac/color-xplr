@@ -61,9 +61,11 @@ export const initString = (root: Root, div: HTMLDivElement) => {
 
   input.addEventListener('input', () => {
     const str = input.value.replace('#', '')
-    if (str.length === 6) {
-      const newColor = new Color().fromHex(Number.parseInt(str, 16))
+    try {
+      const newColor = new Color().parse(str)
       updateColor(newColor)
+    } catch(error) {
+      // it's ok
     }
   })
 

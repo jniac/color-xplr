@@ -1,10 +1,11 @@
 import { rgb_to_hsl, rgb_to_hsv, hsl_to_rgb, hsv_to_rgb, rgb_to_grayscale } from './color-conversion'
+import { colorKeywords, hexToKeywords } from './color-keywords'
 import { clamp01, lerpUnclamped, moduloShortLerp, positiveModulo, to0xff, toFF } from './utils'
 
 /**
  * @public
  */
-export type ColorToStringMode = 'hex' | 'rgb' | 'hsl' | 'glsl'
+export type ColorToStringMode = 'hex' | 'rgb' | 'hsl' | 'glsl' | 'keywords'
 
 /**
  * @public
@@ -14,6 +15,92 @@ export type ColorToStringMode = 'hex' | 'rgb' | 'hsl' | 'glsl'
  * - `always` : always
  */
 export type ColorToStringAlphaMode = 'auto' | 'never' | 'always'
+
+const parse = (str: string, color?: Color): { ok: boolean, mode: ColorToStringMode | null, failReason?: string } => {
+  str = str.trim()
+  const ok = (mode: ColorToStringMode) => ({ ok: true, mode })
+  const fail = (failReason: string) => ({ ok: false, mode: null, failReason })
+  const nanSomewhere = (...values: number[]) => values.some(v => Number.isNaN(v))
+  if (str in colorKeywords) {
+    color?.fromHex(colorKeywords[str as keyof typeof colorKeywords])
+    return ok('keywords')
+  }
+  const parseScalarComponent = (str: string) => {
+    if (str.endsWith('%')) {
+      return Number.parseFloat(str.slice(0, -1)) / 100
+    } else {
+      return Number.parseInt(str)
+    }
+  }
+  const parseTripletComponent = (str: string) => {
+    if (str.endsWith('%')) {
+      return Number.parseFloat(str.slice(0, -1)) / 100
+    } else if (str.endsWith('deg')) {
+      return Number.parseFloat(str.slice(0, -1)) / 360
+    } else {
+      return Number.parseInt(str) / 0xff
+    }
+  }
+  const parseCssTriplet = (str: string) => {
+    // rgb(100% 10% 10%/.5)
+    // rgb(255 25 25 / 75%)
+    const [tripletStr, alphaStr = '1'] = str.split(/\s*\/\s*/)
+    const [r, g, b] = tripletStr.split(/\s+/).map(parseTripletComponent)
+    const a = parseScalarComponent(alphaStr)
+    return [r, g, b, a]
+  }
+  if (str.startsWith('#')) {
+    if (/^#[a-f0-9]+$/i.test(str) && (
+      str.length === 4
+      || str.length === 5
+      || str.length === 7
+      || str.length === 9
+    )) {
+      color?.fromHex(Number.parseInt(str.slice(1), 16))
+      return ok('hex')
+    } else {
+      return fail('Invalid "hex" string (length mismatch)')
+    }
+  }
+  if (/^rgba?/.test(str)) {
+    const [r, g, b, a] = parseCssTriplet(str.replace(/rgba?/, '').slice(1, -1))
+    if (nanSomewhere(r, g, b, a)) {
+      return fail('Invalid "rgb" string (NaN values)')
+    } else {
+      color?.set(r, g, b, a)
+      return ok('glsl')
+    }
+  }
+  if (/^hsla?/.test(str)) {
+    const [h, s, l, a] = parseCssTriplet(str.replace(/hsla?/, '').slice(1, -1))
+    if (nanSomewhere(h, s, l, a)) {
+      return fail('Invalid "hsl" string (NaN values)')
+    } else {
+      color?.setHSL(h, s, l, a)
+      return ok('glsl')
+    }
+  }
+  if (str.startsWith('vec')) {
+    const size = Number.parseInt(str.charAt(3))
+    const rgba = str.slice(5, -1).split(/\s*,\s*/)
+    if (rgba.length !== size) {
+      return fail(`Invalid "glsl" string (size mismatch: "${str.slice(0, 4)}" vs ${rgba.length} elements)`)
+    } else {
+      const [r, g, b, a = 1] = rgba.map(v => Number.parseFloat(v))
+      if (nanSomewhere(r, g, b, a)) {
+        return fail('Invalid "glsl" string (NaN values)')
+      } else {
+        color?.set(r, g, b, a)
+        return ok('glsl')
+      }
+    }
+  }
+  return {
+    ok: false,
+    mode: null,
+    failReason: 'Invalid string',
+  }
+}
 
 /**
  * Utility class that represents a color (rgba + hsl / hsv).
@@ -174,10 +261,18 @@ export class Color {
     throw new Error(`Unsupported string format: "${str}"`)
   }
 
+  parse(str: string) {
+    const { ok, failReason } = parse(str, this)
+    if (ok === false) {
+      throw new Error(failReason)
+    }
+    return this
+  }
+
   from(arg: string | number | { r: number; g: number; b: number; a?: number } | { h: number; s: number; l: number; a?: number } | { h: number; s: number; v: number; a?: number }) {
     switch (typeof arg) {
       case 'string': {
-        return this.fromCss(arg)
+        return this.parse(arg)
       }
       case 'number': {
         return this.fromHex(arg)
@@ -302,6 +397,9 @@ export class Color {
       : `vec3(${this.r.toFixed(precision)}, ${this.g.toFixed(precision)}, ${this.b.toFixed(precision)})`
   }
 
+  /**
+   * Returns a string beginning with '#' (eg: #ff9900)
+   */
   toHexString({
     includeAlpha = 'auto' as ColorToStringAlphaMode,
   } = {}) {
@@ -315,7 +413,7 @@ export class Color {
   } = {}) {
     const { r, g, b, a } = this
     return includeAlpha === 'always' || (includeAlpha === 'auto' && a < 1)
-      ? `rgba(${to0xff(r)} ${to0xff(g)} ${to0xff(b)} / ${(a * 100).toFixed(0)}%)`
+      ? `rgb(${to0xff(r)} ${to0xff(g)} ${to0xff(b)} / ${(a * 100).toFixed(0)}%)`
       : `rgb(${to0xff(r)} ${to0xff(g)} ${to0xff(b)})`
   }
 
@@ -325,7 +423,7 @@ export class Color {
     const { a } = this
     const { h, s, l } = this.hsl
     return includeAlpha === 'always' || (includeAlpha === 'auto' && a < 1)
-      ? `hsla(${(h * 360).toFixed(0)}deg ${(s * 100).toFixed(0)}% ${(l * 100).toFixed(0)}% / ${(a * 100).toFixed(0)}%)`
+      ? `hsl(${(h * 360).toFixed(0)}deg ${(s * 100).toFixed(0)}% ${(l * 100).toFixed(0)}% / ${(a * 100).toFixed(0)}%)`
       : `hsl(${(h * 360).toFixed(0)}deg ${(s * 100).toFixed(0)}% ${(l * 100).toFixed(0)}%)`
   }
 
@@ -333,11 +431,12 @@ export class Color {
     mode = 'hex' as ColorToStringMode,
     includeAlpha = 'auto' as ColorToStringAlphaMode,
   } = {}) {
-    switch(mode) {
+    switch (mode) {
       case 'hex': return this.toHexString({ includeAlpha })
       case 'glsl': return this.toGlslString({ includeAlpha })
       case 'rgb': return this.toRgbString({ includeAlpha })
       case 'hsl': return this.toHslString({ includeAlpha })
+      case 'keywords': return hexToKeywords(this.toHex()) ?? this.toHexString({ includeAlpha: 'never' })
       default: {
         throw new Error(`toString invalid mode "${mode}"`)
       }
