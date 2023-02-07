@@ -21,9 +21,12 @@ ${stringCss}
 }
 
 #color-xplr, #color-xplr * {
-  margin: 0;
   position: relative;
   box-sizing: border-box;
+}
+
+#color-xplr * {
+  margin: 0;
 }
 
 #color-xplr {
