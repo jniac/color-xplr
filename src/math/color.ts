@@ -50,16 +50,36 @@ const parse = (str: string, color?: Color): { ok: boolean, mode: ColorToStringMo
     return [r, g, b, a]
   }
   if (str.startsWith('#')) {
-    if (/^#[a-f0-9]+$/i.test(str) && (
-      str.length === 4
-      || str.length === 5
-      || str.length === 7
-      || str.length === 9
-    )) {
-      color?.fromHex(Number.parseInt(str.slice(1), 16))
-      return ok('hex')
-    } else {
-      return fail('Invalid "hex" string (length mismatch)')
+    if (/^#[a-f0-9]+$/i.test(str) === false) {
+      return fail('Invalid "hex" string (invalid characters)')
+    }
+    switch (str.length) {
+      case 4:
+      case 5: {
+        // https://en.wikipedia.org/wiki/Web_colors#Hex_triplet
+        const [r, g, b, a] = [
+          str.slice(1, 2),
+          str.slice(2, 3),
+          str.slice(3, 4),
+          str.slice(4, 5) || 'f',
+        ].map(x => Number.parseInt(`${x}${x}`, 16) / 0xff)
+        color?.set(r, g, b, a)
+        return ok('hex')
+      }
+      case 7:
+      case 9: {
+        const [r, g, b, a] = [
+          str.slice(1, 3),
+          str.slice(3, 5),
+          str.slice(5, 7),
+          str.slice(7, 9) || 'ff',
+        ].map(x => Number.parseInt(x, 16) / 0xff)
+        color?.set(r, g, b, a)
+        return ok('hex')
+      }
+      default: {
+        return fail('Invalid "hex" string (length mismatch)')
+      }
     }
   }
   if (/^rgba?/.test(str)) {
