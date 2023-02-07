@@ -11,3 +11,19 @@ app.onChange(({ color }) => {
 })
 
 section.append(app.element)
+
+for (const input of section.querySelectorAll('input.xplr[type=color]')) {
+  input.onclick = event => {
+    event.preventDefault()
+    createColorXplr({
+      color: input.value,
+      modal: {
+        source: input,
+      },
+      onChange: app => {
+        const { color } = app
+        input.value = color.toHexString()
+      },
+    })
+  }
+}
