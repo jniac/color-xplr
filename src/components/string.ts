@@ -66,7 +66,20 @@ export const initString = (root: Root, div: HTMLDivElement) => {
 
   input.addEventListener('input', () => {
     try {
-      const newColor = new Color().parse(input.value)
+      // NOTE: on input we cannot support hex triplet since it breaks the usage...
+      const allowHexTriplet = false
+      const newColor = new Color().parse(input.value, { allowHexTriplet })
+      updateColor(newColor)
+    } catch(error) {
+      // it's ok
+    }
+  })
+
+  input.addEventListener('change', () => {
+    try {
+      // NOTE: ... but it is ok, when the user validate his change (Enter key).
+      const allowHexTriplet = true
+      const newColor = new Color().parse(input.value, { allowHexTriplet })
       updateColor(newColor)
     } catch(error) {
       // it's ok

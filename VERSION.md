@@ -1,3 +1,10 @@
+# 1.0.14
+- Fix "hex triplet" bug
+  - When the input change to a triplet value (with or without alpha, ex: #fc0 or #fc03)
+  the value was immediately parsed and transformed to a regular hex string. But it 
+  was intempestive and makes it impossible to use the backspace key.
+- `ColorParseOptions` is exposed (public).
+
 # 1.0.13
 - Fix broken input (changing the value did not update the app).
 - Easy paste:
