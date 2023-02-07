@@ -1,4 +1,4 @@
-# 1.0.12 (incoming)
+# 1.0.12
 - Support of [color keywords](https://developer.mozilla.org/en-US/docs/Web/CSS/named-color), 
   based on [three.js/Color](https://github.com/mrdoob/three.js/blob/master/src/math/Color.js)
   - ```
