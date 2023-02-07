@@ -66,10 +66,15 @@ export const initString = (root: Root, div: HTMLDivElement) => {
 
   input.addEventListener('input', () => {
     try {
-      // NOTE: on input we cannot support hex triplet since it breaks the usage...
-      const allowHexTriplet = false
-      const newColor = new Color().parse(input.value, { allowHexTriplet })
-      updateColor(newColor)
+      // NOTE: on "input" events we update the value OOONNNLLYYYY if the two 
+      // string are strictly identical, otherwise it break the usage by rewriting
+      // new color string when the current edited value match a valid potential 
+      // color declaration.
+      const newColor = new Color().parse(input.value)
+      const stringsAreTheSame = input.value === newColor.toString({ mode, includeAlpha })
+      if (stringsAreTheSame) {
+        updateColor(newColor)
+      }
     } catch(error) {
       // it's ok
     }
@@ -77,9 +82,7 @@ export const initString = (root: Root, div: HTMLDivElement) => {
 
   input.addEventListener('change', () => {
     try {
-      // NOTE: ... but it is ok, when the user validate his change (Enter key).
-      const allowHexTriplet = true
-      const newColor = new Color().parse(input.value, { allowHexTriplet })
+      const newColor = new Color().parse(input.value)
       updateColor(newColor)
     } catch(error) {
       // it's ok

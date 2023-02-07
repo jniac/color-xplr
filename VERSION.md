@@ -1,3 +1,10 @@
+# 1.0.15
+- Fix the "hex-triplet-or-whatever" bug.
+  - The bug occured not only with triplet but with any intermediate value that is
+  valid but not desired by the user (ex removing "ff" from "#336699ff" triggered
+  immediately a rewrite from "#336699" to "#336699ff"). By comparing the two value
+  the bug is fixed.
+
 # 1.0.14
 - Fix "hex triplet" bug
   - When the input change to a triplet value (with or without alpha, ex: #fc0 or #fc03)
