@@ -27,13 +27,18 @@ export const initString = (root: Root, div: HTMLDivElement) => {
     update()
   }
 
-  copy.onpointerdown = event => event.preventDefault()
-  copy.onclick = () => {
+  const copyToClipboard = () => {
     div.classList.add('flash')
     window.requestAnimationFrame(() => {
       div.classList.remove('flash')
       navigator.clipboard.writeText(input.value)
     })
+  }
+  div.addEventListener('copy-to-clipboard', () => copyToClipboard())
+
+  copy.onpointerdown = event => event.preventDefault()
+  copy.onclick = () => {
+    div.dispatchEvent(new CustomEvent('copy-to-clipboard'))
   }
 
   alpha.onpointerdown = event => event.preventDefault()

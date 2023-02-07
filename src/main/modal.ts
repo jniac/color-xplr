@@ -12,9 +12,10 @@ const getContainerRect = (arg: Window | HTMLElement, margin: number) => {
   }
 }
 
-const handlePasteEvent = (root: Root) => {
+const handleCopyPaste = (root: Root) => {
   const onPaste = (event: ClipboardEvent): void => {
     try {
+      event.preventDefault()
       const data = (event.clipboardData || (window as any).clipboardData).getData('text')
       const newColor = new Color().parse(data)
       root.updateColor(newColor)
@@ -22,8 +23,16 @@ const handlePasteEvent = (root: Root) => {
     }
   }
   root.div.addEventListener('paste', onPaste)
+  const onKeyDown = (event: KeyboardEvent): void => {
+    if (event.code === 'KeyC' && (event.metaKey || event.ctrlKey)) {
+      const string = root.div.querySelector('.string')!
+      string.dispatchEvent(new CustomEvent('copy-to-clipboard'))
+    }
+  }
+  document.addEventListener('keydown', onKeyDown)
   root.onDestroy(() => {    
     root.div.removeEventListener('paste', onPaste)
+    document.removeEventListener('keydown', onKeyDown)
   })
 }
 
@@ -79,5 +88,5 @@ export const createModal = (app: Root, modal: ModalParams) => {
     }),
   )  
 
-  handlePasteEvent(app)
+  handleCopyPaste(app)
 }
