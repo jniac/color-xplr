@@ -7,7 +7,7 @@ import { html } from './html'
 import { createModal } from './modal'
 import { ColorXplrApp, Root } from './root'
 import { css } from './style.css'
-import { ColorXplrParams, StyleParams, PlaneMode, colorXplrParamsDefaults } from './types'
+import { ColorXplrParams, StyleParams, colorXplrParamsDefaults } from './types'
 
 const styleClassName = 'color-xplr-HDSL284H10LDK894'
 /**
@@ -32,10 +32,14 @@ const destroyStyleElement = () => {
 /**
  * Process the custom style params. 
  */
-const processCustomStyle = (element: HTMLElement, stykeParams: StyleParams) => {
-  const ensureString = (value: number | string, unit?: string) => {
+const processCustomStyle = (element: HTMLElement, styleParams: StyleParams) => {
+  const ensureString = (
+    value: number | string, 
+    unit?: string, 
+    unitRegExp = new RegExp(`${unit}$`),
+  ) => {
     value = value.toString()
-    if (unit && value.endsWith(unit) === false) {
+    if (unit && unitRegExp.test(value) === false) {
       value = `${value}${unit}`
     }
     return value
@@ -45,7 +49,8 @@ const processCustomStyle = (element: HTMLElement, stykeParams: StyleParams) => {
     width,
     sliderHeight,
     backgroundColor,
-  } = stykeParams ?? {}
+    fontSize,
+  } = styleParams ?? {}
   if (width) {
     element.style.setProperty('--width', ensureString(width, 'px'))
   }
@@ -54,6 +59,9 @@ const processCustomStyle = (element: HTMLElement, stykeParams: StyleParams) => {
   }
   if (backgroundColor) {
     element.style.setProperty('--background-color', ensureString(backgroundColor))
+  }
+  if (fontSize) {
+    element.style.setProperty('--font-size', ensureString(fontSize, 'px', /px|em$/))
   }
 }
 

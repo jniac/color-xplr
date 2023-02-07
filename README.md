@@ -9,12 +9,18 @@ It's not a picker, it's an explorer.
   <img width="640" src="extras/screen-2.png">
 </a>
 
+[VERSION.md](./VERSION.md)
+
 ## Features:
 - 4 "plane" modes: hue, red, green, blue (for inspiration)
 - "copy to clipboard" button
+- easy paste (do not have to focus the input)
 - hue, luminosity, saturation, red, green & blue sliders (for fine control over tint).
 - modal position: "align" mode & "stay-inside-window" feature
 - string mode: 
+  - [keywords](https://developer.mozilla.org/en-US/docs/Web/CSS/named-color)
+    - `red`
+    - `rebeccapurple`
   - hex: 
     - `#f9bd77`
     - `#f9bd77ff`

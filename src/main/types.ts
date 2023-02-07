@@ -26,6 +26,9 @@ export const styleParamsDefaults = {
   
   /** Ok, it's what you guessed. */
   backgroundColor: <string> '#eee',
+
+  /** Font size, default is 14 (px). */
+  fontSize: <string | number> 14,
 }
 
 /** @public */

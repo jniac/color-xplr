@@ -2,6 +2,7 @@ import { planeModeCss } from '../components/plane-modes.css'
 import { planeCss } from '../components/plane.css'
 import { sliderCss } from '../components/slider.css'
 import { stringCss } from '../components/string.css'
+import { styleParamsDefaults } from './types'
 
 export const css: string = /* css */`
 @import url(https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&display=swap);
@@ -11,10 +12,11 @@ ${sliderCss}
 ${stringCss}
 
 #color-xplr {
-  --width: 240px;
+  --font-size: ${styleParamsDefaults.fontSize}px;
+  --width: ${styleParamsDefaults.width}px;
   --padding: 4px;
-  --slider-height: 18px;
-  --background-color: #eee;
+  --slider-height: ${styleParamsDefaults.sliderHeight}px;
+  --background-color: ${styleParamsDefaults.backgroundColor};
   --inner-width: calc(var(--width) - 2 * var(--padding));
 }
 
@@ -32,6 +34,7 @@ ${stringCss}
   font-family: 'Fira Code', monospace;
   /* Quite an hack: transform: scale(1) is here to force the html element to be rendered as a flat object, and prevent inner z-index to fight with outer elements. */
   transform: scale(1);
+  font-size: var(--font-size);
 }
 
 #color-xplr .colors {

@@ -1,6 +1,6 @@
 import { onDirectTap, onKey } from './utils'
 import { Root } from './root'
-import { Point, Rect } from '../math'
+import { Color, Point, Rect } from '../math'
 import { ModalParams, modalParamsDefaults } from './types'
 
 const getContainerRect = (arg: Window | HTMLElement, margin: number) => {
@@ -10,6 +10,21 @@ const getContainerRect = (arg: Window | HTMLElement, margin: number) => {
     const rect = arg.getBoundingClientRect()
     return new Rect().apply(rect).inflate(-margin)
   }
+}
+
+const handlePasteEvent = (root: Root) => {
+  const onPaste = (event: ClipboardEvent): void => {
+    try {
+      const data = (event.clipboardData || (window as any).clipboardData).getData('text')
+      const newColor = new Color().parse(data)
+      root.updateColor(newColor)
+    } catch (error) {
+    }
+  }
+  root.div.addEventListener('paste', onPaste)
+  root.onDestroy(() => {    
+    root.div.removeEventListener('paste', onPaste)
+  })
 }
 
 export const createModal = (app: Root, modal: ModalParams) => {
@@ -24,11 +39,12 @@ export const createModal = (app: Root, modal: ModalParams) => {
   } = modal
 
   const div = document.createElement('div')
-  div.focus()
   div.id = 'color-xplr-modal'
   div.style.zIndex = String(zIndex)
+  div.tabIndex = 0
   div.append(app.div)
   container.append(div)
+  div.focus()
 
   // Positioning:
   const containerRect = getContainerRect(containerRectArg, containerPadding)
@@ -62,4 +78,6 @@ export const createModal = (app: Root, modal: ModalParams) => {
       app.destroy()
     }),
   )  
+
+  handlePasteEvent(app)
 }

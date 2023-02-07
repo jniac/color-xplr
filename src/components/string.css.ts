@@ -1,7 +1,6 @@
 export const stringCss = /* css */`
 #color-xplr .string {
   --color: white;
-  --font-size: 9px;
   --background-color: black;
   --height: 80px;
   display: flex;
@@ -46,30 +45,33 @@ export const stringCss = /* css */`
   background-color: transparent;
   height: 80px;
   color: var(--color);
-  font-size: var(--font-size);
+  font-size: inherit;
 }
 
 #color-xplr .string .abs {
-  --size: 12px;
+  --size-horz: 18px;
+  --size-vert: 32px;
   position: absolute;
   display: flex;
-  top: calc(50% - var(--size) / 2);
+  top: calc(50% - var(--size-vert) / 2);
 }
 
-#color-xplr .string .abs > * + * {
+/* #color-xplr .string .abs > * + * {
   margin-left: 2px;
-}
+} */
 
 #color-xplr .string .abs.left {
-  left: 7px;
+  left: 5px;
 }
 
 #color-xplr .string .abs.right {
-  right: 7px;
+  right: 5px;
 }
-
-#color-xplr .string .btn.alpha {
+#color-xplr .string .btn {
   padding: 2px;
+}
+#color-xplr .string .btn.alpha {
+  padding: 5px;
 }
 #color-xplr .string .btn.alpha.dim {
   opacity: .5;
@@ -79,8 +81,8 @@ export const stringCss = /* css */`
 }
 
 #color-xplr .string .btn {
-  width: var(--size);
-  height: var(--size);
+  width: var(--size-horz);
+  height: var(--size-vert);
   display: flex;
   cursor: pointer;
 }

@@ -46,7 +46,7 @@ export const initString = (root: Root, div: HTMLDivElement) => {
   const update = () => {
     div.style.setProperty('--color', color.toGrayscale() > .5 ? 'black' : 'white')
     div.style.setProperty('--background-color', color.toHexString())
-    div.style.setProperty('--font-size', mode === 'hex' ? '12px' : '8px')
+    div.style.setProperty('font-size', mode === 'hex' ? '1em' : '.66em')
     input.value = color.toString({ mode, includeAlpha })
     alpha.classList.toggle('dim', includeAlpha === 'auto' && color.a === 1)
     const [d1, d2, d3] = div.querySelectorAll('.background > *') as NodeListOf<HTMLDivElement>
@@ -60,9 +60,8 @@ export const initString = (root: Root, div: HTMLDivElement) => {
   }
 
   input.addEventListener('input', () => {
-    const str = input.value.replace('#', '')
     try {
-      const newColor = new Color().parse(str)
+      const newColor = new Color().parse(input.value)
       updateColor(newColor)
     } catch(error) {
       // it's ok
